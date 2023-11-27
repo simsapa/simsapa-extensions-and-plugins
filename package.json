@@ -1,0 +1,23 @@
+{
+  "name": "simsapa-browser-extension",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --build src"
+  },
+  "author": "Gambhiro",
+  "license": "MIT",
+  "devDependencies": {
+    "@arrow-js/core": "^1.0.0-alpha.9",
+    "@types/firefox-webext-browser": "^120.0.0",
+    "@types/google-apps-script": "^1.0.78",
+    "clipboard-polyfill": "^4.0.1",
+    "sass": "^1.69.5",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.2",
+    "webextension-polyfill": "^0.10.0",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

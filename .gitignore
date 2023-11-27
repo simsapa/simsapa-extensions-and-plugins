@@ -1,0 +1,56 @@
+# Build targets
+dist-addon/
+dist-firefox/
+src/sidebar.css
+src/sidebar.css.map
+
+# Clasp local config
+.clasp.json
+
+# Node dependencies
+node_modules/
+
+# Logs
+logs
+*.log
+
+# VS Code
+.vscode/
+
+# Emacs temp files
+*~
+\#*\#
+*.elc
+auto-save-list
+tramp
+.\#*
+.projectile
+TAGS
+
+# Vim temp files
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+*~
+tags
+
+# dotenv environment variables file
+.env
+.env.test
+
+# MacOS
+.DS_Store
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/

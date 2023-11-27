@@ -1,0 +1,29 @@
+{
+    "files": ["addon.ts"],
+    "include": ["**/*.ts"],
+    "compilerOptions": {
+        "target": "es2016",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "types": [
+            "google-apps-script"
+        ],
+        "experimentalDecorators": true,
+        "module": "None",
+        "moduleResolution": "node",
+        "outFile": "../dist-addon/addon.js",
+        "allowJs": false,
+        "checkJs": false,
+        "maxNodeModuleJsDepth": 1,
+        "removeComments": false,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "alwaysStrict": true,
+        "skipLibCheck": true
+    }
+}

@@ -1,0 +1,47 @@
+$edge_gap: 12px
+
+.sidebar
+  padding-left: 0
+  padding-right: 0
+
+.controls, .messages
+  padding: 0 $edge_gap 0.5em $edge_gap
+
+.button-bar
+  button
+    height: 29px
+    line-height: 29px
+
+.dpd-word
+  color: #000
+  background-color: #fff
+  padding: 0.5em $edge_gap
+  margin: 0
+  border-bottom: 1px solid #888
+
+  &:nth-child(2n)
+    background-color: #eeeeee
+
+  &.selected
+    background-color: #a6dbf2
+
+  .dpd-header
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    align-items: flex-start
+
+  .dpd-details
+    padding-top: 0.4em
+    font-size: 0.8em
+
+.icon
+  display: inline-block
+  width: 1em
+  height: 1em
+  stroke-width: 0
+  stroke: currentColor
+  fill: currentColor
+
+.hide
+  display: none

@@ -1,0 +1,43 @@
+{
+    "manifest_version": 2,
+    "name": "Simsapa",
+    "version": "0.1.0",
+    "author": "Gambhiro",
+    "description": "Simsapa",
+    "icons": {
+        "48": "icons/simsapa-48.png"
+    },
+    "browser_action": {
+        "default_icon": "icons/simsapa-48.png",
+        "default_title": "Simsapa Sidebar"
+    },
+
+    "background": {
+        "scripts":["background.js"]
+    },
+    "sidebar_action": {
+        "default_icon": "icons/simsapa-48.png",
+        "default_title": "Simsapa",
+        "default_panel": "sidebar.html",
+        "browser_style": false,
+        "open_at_install": false
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["*://docs.google.com/*"],
+            "css": ["docs-user-style.css"]
+        }
+    ],
+    "permissions": [
+        "activeTab"
+    ],
+    "commands": {
+        "toggle": {
+            "suggested_key": {
+                "default": "Alt+Shift+D"
+            },
+            "description": "__MSG_toggle_extension__"
+        }
+    }
+}
