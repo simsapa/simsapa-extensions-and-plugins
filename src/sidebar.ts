@@ -1,5 +1,6 @@
 import { reactive, html } from "@arrow-js/core";
 import * as h from "./helpers";
+import typeahead from 'typeahead-standalone';
 
 const SIMSAPA_BASE_URL = "http://localhost:4848";
 const SEARCH_TIMER_SPEED = 400;
@@ -158,6 +159,29 @@ window.addEventListener("DOMContentLoaded", function () {
   h.set_click('#copy-meaning', () => { h.set_clipboard_text(cr('meaning_1')) });
   h.set_click('#copy-gloss', copy_gloss);
   h.set_click('#gloss-keys-btn', () => { h.toggle_hide('#gloss-keys-wrap') });
+
+  const search_input_el = <HTMLInputElement>document.getElementById("query-text");
+
+  typeahead({
+    input: search_input_el,
+    minLength: 2,
+    limit: 20,
+    diacritics: true,
+    highlight: true,
+    hint: true,
+    autoSelect: true,
+    preventSubmit: true,
+    source: {
+      prefetch: {
+        url: SIMSAPA_BASE_URL + '/dpd_word_completion_list',
+        when: 'onInit',
+        done: false,
+      },
+    },
+    onSubmit: (__e__, __selected_suggestion__) => {
+      search_handler();
+    },
+  });
 
   h.set_input('#query-text', function() {
     clearTimeout(TYPING_TIMEOUT);

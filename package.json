@@ -15,6 +15,7 @@
     "clipboard-polyfill": "^4.0.1",
     "sass": "^1.69.5",
     "ts-loader": "^9.5.1",
+    "typeahead-standalone": "^4.23.0",
     "typescript": "^5.3.2",
     "webextension-polyfill": "^0.10.0",
     "webpack": "^5.89.0",
