@@ -43,7 +43,7 @@ function search_handler(min_length = 4): void {
   const el = <HTMLInputElement>document.getElementById('query-text')!;
   const query_text = el.value;
 
-  if (query_text.length < min_length) {
+  if (!h.is_numeric(query_text) && query_text.length < min_length) {
     return;
   }
 
@@ -67,7 +67,7 @@ function search_handler(min_length = 4): void {
 
 function show_dpd_word_handler(dpd_id: number): void {
   const url = SIMSAPA_BASE_URL + "/lookup_window_query";
-  const data = { dpd_id: dpd_id };
+  const data = { query_text: dpd_id.toString() };
 
   fetch(url, {
     method: "POST",

@@ -46,6 +46,12 @@ async function set_clipboard_html(html: string, text: string): Promise<void> {
   await clipboard.write([item]);
 }
 
+function is_numeric(str: any): boolean {
+    // https://stackoverflow.com/a/175787
+    if (typeof str != "string") return false;
+    // @ts-ignore
+    return !isNaN(str) && !isNaN(parseFloat(str));
+}
 
 export {
     toggle_hide,
@@ -54,4 +60,5 @@ export {
     set_input,
     set_clipboard_text,
     set_clipboard_html,
+    is_numeric,
 }
