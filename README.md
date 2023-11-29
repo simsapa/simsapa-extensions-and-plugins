@@ -12,7 +12,10 @@ poetry install
 
 npm install -g @google/clasp
 
+npm install -g web-ext
+
 make dist-addon
 make dist-firefox
+make dist-chrome
 ```
 

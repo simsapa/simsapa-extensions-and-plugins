@@ -32,6 +32,7 @@ dist-firefox: sidebar.css sidebar.js sidebar.html-firefox
 	cp src/background.js dist-firefox/
 	cp src/docs-user-style.css dist-firefox/
 	cp src/manifest-firefox.json dist-firefox/manifest.json
+	cd dist-firefox && web-ext lint && web-ext run
 
 dist-chrome: sidebar.css sidebar.js sidebar.html-firefox
 	cp dist-firefox/sidebar.css dist-chrome/
