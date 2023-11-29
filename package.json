@@ -1,11 +1,6 @@
 {
   "name": "simsapa-browser-extension",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc --build src"
-  },
   "author": "Gambhiro",
   "license": "MIT",
   "devDependencies": {
