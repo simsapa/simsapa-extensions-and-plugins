@@ -183,6 +183,14 @@ window.addEventListener("DOMContentLoaded", function () {
     },
   });
 
+  // In the Chrome extension, .tt-list gets an inline style value "width: 8px",
+  // which makes the list too narrow to see any suggestion items.
+  let el = document.querySelector(".typeahead-standalone .tt-list");
+  if (el) {
+    let style = el.getAttribute('style').replace(/width:[^;]+;/, '');
+    el.setAttribute('style', style);
+  }
+
   h.set_input('#query-text', function() {
     clearTimeout(TYPING_TIMEOUT);
     TYPING_TIMEOUT = setTimeout(search_handler, SEARCH_TIMER_SPEED);

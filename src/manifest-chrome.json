@@ -1,5 +1,5 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "Simsapa",
     "version": "0.1.0",
     "author": "Gambhiro",
@@ -7,20 +7,15 @@
     "icons": {
         "48": "icons/simsapa-48.png"
     },
-    "browser_action": {
-        "default_icon": "icons/simsapa-48.png",
+    "action": {
         "default_title": "Simsapa Sidebar"
     },
 
     "background": {
-        "scripts":["background.js"]
+        "service_worker": "background.js"
     },
-    "sidebar_action": {
-        "default_icon": "icons/simsapa-48.png",
-        "default_title": "Simsapa",
-        "default_panel": "sidebar.html",
-        "browser_style": false,
-        "open_at_install": false
+    "side_panel": {
+        "default_path": "sidebar.html"
     },
 
     "content_scripts": [
@@ -30,6 +25,7 @@
         }
     ],
     "permissions": [
+        "sidePanel",
         "activeTab"
     ],
     "commands": {
