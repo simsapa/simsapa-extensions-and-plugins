@@ -5,7 +5,7 @@ function toggle_hide(selector: string): void {
   if (el) {
     el.classList.toggle('hide');
   } else {
-      console.error("Cannot find: " + selector);
+    console.error("Cannot find: " + selector);
   }
 }
 
@@ -30,8 +30,38 @@ function set_input(selector: string,
     set_listener(selector, 'input', listener_fn);
 }
 
+function show_transient_message(text: string): void {
+  const div = document.createElement('div');
+  div.className = 'message';
+  div.textContent = text;
+
+  let el = document.getElementById('transient-messages');
+  if (!el) {
+    console.error("Cannot find: transient-messages");
+    return;
+  }
+
+  el.appendChild(div);
+
+  div.style.transition = 'opacity 1.5s ease-in-out';
+  div.style.opacity = '1';
+
+  // After 3 seconds, start fading out
+  setTimeout(() => {
+    div.style.opacity = '0';
+  }, 1000);
+
+  // After the transition ends, remove the div from the DOM
+  div.addEventListener('transitionend', () => {
+    div.remove();
+  });
+}
+
 function set_clipboard_text(text: string): void {
-  navigator.clipboard.writeText(text);
+  navigator.clipboard.writeText(text).then(
+    () => { show_transient_message("Copied!"); },
+    () => { show_transient_message("Failed to copy to clipboard"); },
+  );
 }
 
 async function set_clipboard_html(html: string, text: string): Promise<void> {
@@ -43,7 +73,10 @@ async function set_clipboard_html(html: string, text: string): Promise<void> {
     "text/plain": new Blob([text], { type: "text/plain" }),
   });
 
-  await clipboard.write([item]);
+  await clipboard.write([item]).then(
+    () => { show_transient_message("Copied!"); },
+    () => { show_transient_message("Failed to copy to clipboard"); },
+  );
 }
 
 function is_numeric(str: any): boolean {
@@ -54,11 +87,12 @@ function is_numeric(str: any): boolean {
 }
 
 export {
-    toggle_hide,
-    set_listener,
-    set_click,
-    set_input,
-    set_clipboard_text,
-    set_clipboard_html,
-    is_numeric,
+  toggle_hide,
+  set_listener,
+  set_click,
+  set_input,
+  show_transient_message,
+  set_clipboard_text,
+  set_clipboard_html,
+  is_numeric,
 }

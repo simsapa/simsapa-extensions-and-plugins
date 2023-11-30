@@ -14,7 +14,7 @@ export default class SimsapaPlugin extends Plugin {
 			(leaf) => new SimsapaView(leaf),
 		);
 
-		const ribbon_icon_el = this.addRibbonIcon('dice', 'Simsapa', (_evt: MouseEvent) => {
+		const ribbon_icon_el = this.addRibbonIcon('book', 'Simsapa', (_evt: MouseEvent) => {
 			this.activate_simsapa_view();
 		});
 		ribbon_icon_el.addClass('my-plugin-ribbon-class');

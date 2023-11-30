@@ -11,8 +11,7 @@ let SERVER_CHECK_TIMEOUT: ReturnType<typeof setInterval> = setTimeout(() => {}, 
 
 const DATA = reactive({
   search_results: [],
-  success_msg: "",
-  error_msg: "",
+  search_count_msg: "",
 });
 
 const IS_FIREFOX = (typeof browser !== "undefined");
@@ -65,7 +64,7 @@ function search_handler(min_length = 4): void {
   })
     .then(response => response.json())
     .then(resp => {
-      DATA.success_msg = resp.length + " results";
+      DATA.search_count_msg = resp.length + " results";
       DATA.search_results = resp;
     })
     .catch(error => console.error('Error:', error));
@@ -127,11 +126,8 @@ const search_results_template = html`
 
 search_results_template(document.getElementById('search-results')!);
 
-const success_msg_template = html`<span>${() => DATA.success_msg}</span>`;
-success_msg_template(document.getElementById('success-msg')!);
-
-const error_msg_template = html`<span>${() => DATA.error_msg}</span>`;
-error_msg_template(document.getElementById('error-msg')!);
+const search_count_template = html`<span>${() => DATA.search_count_msg}</span>`;
+search_count_template(document.getElementById('search-count')!);
 
 function copy_gloss(): void {
   if (SELECTED_IDX === null) {
@@ -176,7 +172,9 @@ function server_online_init() {
     limit: 20,
     diacritics: true,
     highlight: true,
-    hint: true,
+    // Hinting inserts another <input> above the original, going to need CSS
+    // adjustments to line up.
+    hint: false,
     autoSelect: true,
     preventSubmit: true,
     source: {

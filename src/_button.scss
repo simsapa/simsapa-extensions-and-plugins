@@ -1,0 +1,86 @@
+// Learn about this technique
+// @link https://moderncss.dev/icon-button-css-styling-guide/
+// https://codepen.io/5t3ph/pen/ExVpVJa
+
+$btnColor: #3e68ff;
+
+.button__icon {
+  width: 0.9em;
+  height: 0.9em;
+  fill: currentcolor;
+  margin-right: 0.5em;
+
+  &--end {
+    margin-right: 0;
+    margin-left: 0.5em;
+  }
+}
+
+// Due to the cascade, find .icon-button after the .button
+
+// Base button styles
+.button {
+  // Reset
+  text-decoration: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+
+  // Display
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  // Optional - see "Gotchas"
+  align-self: start;
+
+  // Visual
+  font-size: 1.0rem;
+  background-color: $btnColor;
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.18);
+
+  // Size
+  &:not(.icon-button) {
+    padding: 0.25em 0.75em;
+    min-width: 10ch;
+    min-height: 30px;
+  }
+
+  // Text
+  text-align: center;
+  line-height: 1.0;
+
+  transition: 220ms all ease-in-out;
+
+  &:hover,
+  &:active {
+    background-color: scale-color($btnColor, $lightness: -20%);
+  }
+
+  //&:focus {
+  //  outline: none;
+  //  box-shadow: 0 0 0 4px scale-color($btnColor, $lightness: -40%);
+  //}
+
+  &--small {
+    font-size: 0.8rem;
+  }
+}
+
+.icon-button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  padding: 0.35em;
+  position: relative;
+  top: 1px;
+
+  &__icon {
+    width: 1rem;
+    height: 1rem;
+    stroke-width: 0;
+    fill: currentColor;
+    stroke: currentColor;
+  }
+}

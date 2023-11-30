@@ -27,29 +27,24 @@
 <div class="row content sidebar" id="simsapa-sidebar">
   <div class="controls">
     <div class="block form-group">
-      <input id="query-text" type="search" placeholder="Query text" style="width: 100%;" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048">
+      <input id="query-text" class="input" type="search" placeholder="Query text" style="width: 100%;" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048">
     </div>
 
-    <div class="block form-group">
-      <label><b>Copy to clipboard:</b></label>
-    </div>
     <div class="block" id="button-bar">
-      <button id="copy-dpd-id" title="Copy DPD ID" style="min-width: 2em;">ID</button>
-      <button id="copy-word" title="Copy word">Word</button>
-      <button id="copy-meaning" title="Copy meaning">Meaning</button>
-      <button id="copy-gloss" title="Copy gloss line as table row">Gloss Line</button>
-      <button
-        id="settings-btn"
-        title="Show settings"
-        style="min-width: 29px; height: 29px; line-height: 29px; font-size: 15px; padding: 0 7px;"
-      >
-        <svg class="icon"><use xlink:href="#icon-gear-solid"></use></svg>
-      </button>
+      <button id="copy-dpd-id" class="button" type="button" title="Copy DPD ID" style="min-width: 2em;">ID</button>
+      <button id="copy-word" class="button" type="button" title="Copy word">Word</button>
+      <button id="copy-meaning" class="button" type="button" title="Copy meaning">Meaning</button>
+      <button id="copy-gloss" class="button" type="button" title="Copy gloss line as table row">Gloss Line</button>
+
+      <button id="settings-btn" class="button icon-button" type="button" title="Show settings">
+        <svg class="icon-button__icon"><use xlink:href="#icon-gear-solid"></use></svg>
+      </a>
     </div>
 
     <div class="block hide" id="settings-wrap">
       <label for="gloss-keys-csv"><b>Gloss keys csv list</b></label>
       <input
+        class="input"
         type="text"
         name="gloss_keys_csv"
         id="gloss-keys-csv"
@@ -57,12 +52,11 @@
         value="id, pali_1, pos, grammar, meaning_1, construction"
       >
     </div>
-  </div>
 
-  <div class="messages">
-    <div class="block" id="success-msg"></div>
-    <div class="block" id="error-msg"></div>
-    <div class="block" id="search-count"></div>
+    <div class="messages">
+      <div class="block" id="transient-messages"></div>
+      <div class="block" id="search-count"></div>
+    </div>
   </div>
 
   <div class="block" id="search-results"></div>

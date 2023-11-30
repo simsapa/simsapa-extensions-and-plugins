@@ -1,11 +1,21 @@
 @import 'typeahead-standalone-basic'
+@import 'button'
+@import 'input'
 
 $edge_gap: 12px
+
+*,
+*::before,
+*::after
+  box-sizing: border-box
 
 html, body
   height: 100%
   padding: 0
   margin: 0
+  font-family: Helvetica, sans-serif
+  font-size: 14px
+  line-height: 18px
 
 .page
   display: flex
@@ -46,16 +56,28 @@ html, body
   color: white
   background-color: #222
 
-.content
+.content, .messages
   padding: 1em 0
 
-.controls, .messages
-  padding: 0 $edge_gap 0.5em $edge_gap
+#simsapa-sidebar .controls
+  position: fixed
+  top: 0
+  left: 0
+  padding: 1rem $edge_gap 0.5em $edge_gap
+  z-index: 10000
+  background-color: white
+  width: 100%
 
-.button-bar
-  button
-    height: 29px
-    line-height: 29px
+#transient-messages
+  text-align: center
+  min-height: 1.5rem
+
+#button-bar, #settings-wrap
+  margin-top: 1em
+
+#search-results
+  position: relative
+  top: 155px
 
 .dpd-word
   color: #000
