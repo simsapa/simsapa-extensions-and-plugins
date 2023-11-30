@@ -4,14 +4,20 @@ import typeahead from 'typeahead-standalone';
 
 const SIMSAPA_BASE_URL = "http://localhost:4848";
 const SEARCH_TIMER_SPEED = 400;
-let TYPING_TIMEOUT: ReturnType<typeof setInterval> = setTimeout(() => {}, 1);
 let SELECTED_IDX: number | null = null;
+
+let TYPING_TIMEOUT: ReturnType<typeof setInterval> = setTimeout(() => {}, 1);
+let SERVER_CHECK_TIMEOUT: ReturnType<typeof setInterval> = setTimeout(() => {}, 1);
 
 const DATA = reactive({
   search_results: [],
   success_msg: "",
   error_msg: "",
 });
+
+const IS_FIREFOX = (typeof browser !== "undefined");
+// const IS_CHROME = (typeof chrome !== "undefined" && chrome.hasOwnProperty('sidePanel'));
+const IS_OBSIDIAN = (typeof chrome !== "undefined" && !chrome.hasOwnProperty('sidePanel'));
 
 // key from current result
 function cr(key: string): string {
@@ -22,10 +28,9 @@ function cr(key: string): string {
   }
 }
 
-// When loaded in the Firefox extension.
-if (typeof browser !== "undefined") {
+if (IS_FIREFOX) {
   // Close the sidebar when the extension icon is clicked again.
-  browser.browserAction.onClicked.addListener(() => {
+  browser.action.onClicked.addListener(() => {
     browser.sidebarAction.close();
   });
 }
@@ -133,33 +138,36 @@ function copy_gloss(): void {
     return;
   }
 
-  let html = "<table><tr><td>";
-
   const el = <HTMLInputElement | null>document.getElementById("gloss-keys-csv");
   if (!el) {
     return;
   }
 
-  const item_keys = el.value.split(",")
-    .map(i => i.trim());
+  const item_keys = el.value.split(",").map(i => i.trim());
 
   const item_values = item_keys.map(key => DATA.search_results[SELECTED_IDX!][key]);
 
-  html += item_values.join("</td><td>");
 
-  html += "</td></tr></table>";
+  if (IS_OBSIDIAN) {
+    // Copy Markdown format table text.
+    const md = "| " + item_values.join(" | ") + " |";
+    h.set_clipboard_text(md);
 
-  const text = item_values.join("; ");
+  } else {
+    // Copy a HTML table row.
+    let html = "<table><tr><td>";
 
-  h.set_clipboard_html(html, text);
+    html += item_values.join("</td><td>");
+
+    html += "</td></tr></table>";
+
+    const text = item_values.join("; ");
+
+    h.set_clipboard_html(html, text);
+  }
 }
 
-window.addEventListener("DOMContentLoaded", function () {
-  h.set_click('#copy-dpd-id', () => { h.set_clipboard_text(cr('id')) });
-  h.set_click('#copy-meaning', () => { h.set_clipboard_text(cr('meaning_1')) });
-  h.set_click('#copy-gloss', copy_gloss);
-  h.set_click('#gloss-keys-btn', () => { h.toggle_hide('#gloss-keys-wrap') });
-
+function server_online_init() {
   const search_input_el = <HTMLInputElement>document.getElementById("query-text");
 
   typeahead({
@@ -197,5 +205,33 @@ window.addEventListener("DOMContentLoaded", function () {
   });
 
   window.addEventListener('dblclick', search_selection);
-});
+}
 
+function check_server() {
+  fetch(SIMSAPA_BASE_URL)
+    .then(response => {
+      if (response.ok) {
+        document.getElementById('main-wrap').classList.remove('hide');
+        document.getElementById('server-offline').classList.add('hide');
+        clearTimeout(SERVER_CHECK_TIMEOUT);
+        server_online_init();
+
+      } else {
+        throw new Error('Server is offline: ' + SIMSAPA_BASE_URL);
+      }
+    })
+    .catch(_error => {
+      document.getElementById('main-wrap').classList.add('hide');
+      document.getElementById('server-offline').classList.remove('hide');
+    });
+}
+
+window.addEventListener("DOMContentLoaded", function () {
+  SERVER_CHECK_TIMEOUT = setInterval(check_server, 1000);
+
+  h.set_click('#copy-dpd-id', () => { h.set_clipboard_text(cr('id')) });
+  h.set_click('#copy-word', () => { h.set_clipboard_text(cr('pali_1')) });
+  h.set_click('#copy-meaning', () => { h.set_clipboard_text(cr('meaning_1')) });
+  h.set_click('#settings-btn', () => { h.toggle_hide('#settings-wrap') });
+  h.set_click('#copy-gloss', copy_gloss);
+});
