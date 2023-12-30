@@ -33,6 +33,7 @@ dist-addon: addon.js sidebar.css sidebar.js sidebar.html-addon
 dist-firefox: sidebar.css sidebar.js sidebar.html-firefox
 	cp -r src/icons/ dist-firefox/
 	cp src/background.js dist-firefox/
+	cp src/content-script.js dist-firefox/
 	cp src/docs-user-style.css dist-firefox/
 	cp src/manifest-firefox.json dist-firefox/manifest.json
 	web-ext lint --source-dir dist-firefox/
@@ -59,3 +60,10 @@ dist-obsidian: sidebar.css sidebar.js sidebar.html-firefox main.js-obsidian styl
 	cp dist-firefox/sidebar.js dist-obsidian/static/
 	cp src-obsidian/main.js dist-obsidian/
 	cp src-obsidian/manifest.json dist-obsidian/
+
+dist-joplin: sidebar.css sidebar.js sidebar.html-firefox styles.css
+	mkdir -p src-joplin/src/static/
+	cp dist-firefox/sidebar.css src-joplin/src/static/
+	cp dist-firefox/sidebar.html src-joplin/src/static/
+	cp dist-firefox/sidebar.js src-joplin/src/static/
+	cd src-joplin && npm run dist

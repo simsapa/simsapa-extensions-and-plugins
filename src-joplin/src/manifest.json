@@ -1,0 +1,15 @@
+{
+	"manifest_version": 1,
+	"id": "io.github.simsapa",
+	"app_min_version": "2.13",
+	"version": "0.1.0",
+	"name": "Simsapa",
+	"description": "Simsapa Joplin Plugin",
+	"author": "Gambhiro",
+	"homepage_url": "https://simsapa.github.io/",
+	"repository_url": "https://github.com/simsapa/simsapa-browser-extension",
+	"keywords": [],
+	"categories": [],
+	"screenshots": [],
+	"icons": {}
+}
