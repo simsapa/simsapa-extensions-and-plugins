@@ -32,6 +32,16 @@ if (IS_FIREFOX) {
   browser.action.onClicked.addListener(() => {
     browser.sidebarAction.close();
   });
+
+  // Receive the selected word from the double click event handler.
+  browser.runtime.onMessage.addListener(function (message) {
+    const el = <HTMLInputElement>document.getElementById('query-text')!;
+    if (!el) {
+      return;
+    }
+    el.value = message.query_text;
+    search_handler();
+  });
 }
 
 function search_result_onclick(idx: number): void {
