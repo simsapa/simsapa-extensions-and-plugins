@@ -86,6 +86,28 @@ function is_numeric(str: any): boolean {
     return !isNaN(str) && !isNaN(parseFloat(str));
 }
 
+function select_tab_elements(tab_div_selector: string,
+                             controls_div_selector: string,
+                             results_div_selector: string): void {
+  let tabs = document.querySelectorAll(".tab");
+  tabs.forEach(el => el.classList.remove("selected"));
+
+  let tab_el = document.querySelector(tab_div_selector);
+  tab_el.classList.add("selected");
+
+  let controls = document.querySelectorAll(".controls");
+  controls.forEach(el => el.classList.add("hide"));
+
+  let active_controls = document.querySelector(controls_div_selector);
+  active_controls.classList.remove("hide");
+
+  let results = document.querySelectorAll(".results-wrap");
+  results.forEach(el => el.classList.add("hide"));
+
+  let active_results = document.querySelector(results_div_selector);
+  active_results.classList.remove("hide");
+}
+
 export {
   toggle_hide,
   set_listener,
@@ -95,4 +117,5 @@ export {
   set_clipboard_text,
   set_clipboard_html,
   is_numeric,
+  select_tab_elements,
 }

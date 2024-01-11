@@ -56,17 +56,37 @@ html, body
   color: white
   background-color: #222
 
-.content, .messages
-  padding: 1em 0
+.content
+  padding: 0.5rem 0
 
-#simsapa-sidebar .controls
+.messages
+  padding: 0.5rem $edge_gap
+
+#simsapa-sidebar .controls-container
   position: fixed
   top: 0
   left: 0
-  padding: 1rem $edge_gap 0.5em $edge_gap
+  padding: 1rem 0 0.5rem 0
   z-index: 10000
   background-color: white
   width: 100%
+
+#sutta-results-wrap
+  position: absolute
+  top: 8.5rem
+
+#dict-results-wrap
+  position: absolute
+  top: 12rem
+
+#suttas-controls,
+#dict-controls
+  padding-left: $edge_gap
+  padding-right: $edge_gap
+
+// Correct the position of the suggestions list for the sutta controls.
+#suttas-controls .typeahead-standalone .tt-list
+  top: 76px
 
 #transient-messages
   text-align: center
@@ -75,11 +95,14 @@ html, body
 #button-bar, #settings-wrap
   margin-top: 1em
 
-#search-results
-  position: relative
-  top: 155px
+/* .results-wrap
+/*   position: relative
+/*   top: 155px
 
-.dpd-word
+#sutta-count, #dict-count
+  padding: 0.5em $edge_gap
+
+.search-result
   color: #000
   background-color: #fff
   padding: 0.5em $edge_gap
@@ -92,15 +115,11 @@ html, body
   &.selected
     background-color: #a6dbf2
 
-  .dpd-header
+  .result-header
     display: flex
     flex-direction: row
     justify-content: space-between
     align-items: flex-start
-
-  .dpd-details
-    padding-top: 0.4em
-    font-size: 0.8em
 
 .icon
   display: inline-block
@@ -110,5 +129,34 @@ html, body
   stroke: currentColor
   fill: currentColor
 
+span.match
+  background-color: yellow
+
 .hide
   display: none
+
+.tabs
+  display: flex
+  border-bottom: 1px solid #ddd
+  margin-bottom: 0.5rem
+
+  .tab
+    cursor: pointer
+    padding: 5px 30px
+    color: #000
+    font-size: 1rem
+    border-bottom: 2px solid transparent
+
+    background-color: #ddd
+    border-radius: 8px 8px 0 0
+
+    &:first-child
+      margin-left: $edge_gap
+    &:last-child
+      margin-right: $edge_gap
+
+  .tab.selected
+    color: white
+    background-color: #737373
+    border-bottom-color: #000
+    border-radius: 8px 8px 0 0

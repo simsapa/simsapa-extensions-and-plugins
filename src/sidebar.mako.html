@@ -24,41 +24,61 @@
 </div>
 
 <div class="row content sidebar" id="simsapa-sidebar">
-  <div class="controls">
-    <div class="block form-group">
-      <input id="query-text" class="input" type="search" placeholder="Query text" style="width: 100%;" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048">
+  <div class="controls-container">
+    <div class="tabs">
+      <div class="tab" id="suttas-tab">Suttas</div>
+      <div class="tab selected" id="dictionary-tab">Dictionary</div>
     </div>
 
-    <div class="block" id="button-bar">
-      <button id="copy-dpd-id" class="button" type="button" title="Copy DPD ID" style="min-width: 2em;">ID</button>
-      <button id="copy-word" class="button" type="button" title="Copy word">Word</button>
-      <button id="copy-meaning" class="button" type="button" title="Copy meaning">Meaning</button>
-      <button id="copy-gloss" class="button" type="button" title="Copy gloss line as table row">Gloss Line</button>
-
-      <button id="settings-btn" class="button icon-button" type="button" title="Show settings">
-        <svg class="icon-button__icon"><use xlink:href="#icon-gear-solid"></use></svg>
-      </button>
+    <div id="suttas-controls" class="controls hide">
+      <div class="block form-group">
+        <input id="suttas-query-text" class="input" type="search" placeholder="Sutta query" style="width: 100%;" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048">
+      </div>
     </div>
 
-    <div class="block hide" id="settings-wrap">
-      <label for="gloss-keys-csv"><b>Gloss keys csv list</b></label>
-      <input
-        class="input"
-        type="text"
-        name="gloss_keys_csv"
-        id="gloss-keys-csv"
-        style="width: 100%;"
-        value="id, pali_1, pos, grammar, meaning_1, construction"
-      >
+    <div id="dict-controls" class="controls">
+      <div class="block form-group">
+        <input id="dict-query-text" class="input" type="search" placeholder="Dictionary query" style="width: 100%;" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048">
+      </div>
+
+      <div class="block" id="button-bar">
+        <button id="copy-uid" class="button" type="button" title="Copy UID" style="min-width: 2em;">UID</button>
+        <button id="copy-word" class="button" type="button" title="Copy word">Word</button>
+        <button id="copy-meaning" class="button" type="button" title="Copy meaning">Meaning</button>
+        <button id="copy-gloss" class="button" type="button" title="Copy gloss line as table row">Gloss Line</button>
+
+        <button id="settings-btn" class="button icon-button" type="button" title="Show settings">
+          <svg class="icon-button__icon"><use xlink:href="#icon-gear-solid"></use></svg>
+        </button>
+      </div>
+
+      <div class="block hide" id="settings-wrap">
+        <label for="gloss-keys-csv"><b>Gloss keys csv list</b></label>
+        <input
+          class="input"
+          type="text"
+          name="gloss_keys_csv"
+          id="gloss-keys-csv"
+          style="width: 100%;"
+          value="id, pali_1, pos, grammar, meaning_1, construction"
+        >
+      </div>
     </div>
 
     <div class="messages">
       <div class="block" id="transient-messages"></div>
-      <div class="block" id="search-count"></div>
     </div>
   </div>
 
-  <div class="block" id="search-results"></div>
+  <div class="block results-wrap hide" id="sutta-results-wrap">
+    <div class="block" id="sutta-count"></div>
+    <div class="block" id="sutta-results"></div>
+  </div>
+
+  <div class="block results-wrap" id="dict-results-wrap">
+    <div class="block" id="dict-count"></div>
+    <div class="block" id="dict-results"></div>
+  </div>
 </div>
 
 <div class="row footer">
