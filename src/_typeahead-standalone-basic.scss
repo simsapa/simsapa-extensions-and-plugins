@@ -3,6 +3,10 @@
   display: flex;
   flex-direction: column;
   text-align: left;
+
+  input {
+    border-width: 1px;
+  }
 }
 .typeahead-standalone .tt-input {
   background: transparent;
