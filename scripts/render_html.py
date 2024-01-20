@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 
 from mako.template import Template
+from mako.lookup import TemplateLookup
 
 parser = argparse.ArgumentParser()
 parser.add_argument("input_html")
@@ -22,7 +23,7 @@ def main():
     with open(html_input_path, 'r', encoding="utf-8") as f:
         html_content = f.read()
 
-    t = Template(html_content)
+    t = Template(html_content, lookup=TemplateLookup(directories=[html_input_path.parent]))
     html_content = str(t.render(render_purpose=render_purpose))
 
     for match in re.finditer(r'<<(.+?)>>', html_content):

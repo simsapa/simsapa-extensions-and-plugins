@@ -1,5 +1,11 @@
 import * as clipboard from "clipboard-polyfill";
 
+const RE_ALL_BOOK_SUTTA_REF = /(?<!\/)\b(DN|MN|SN|AN|Pv|Vv|Vism|iti|kp|khp|snp|th|thag|thig|ud|uda|dhp)[ .]*(\d[\d\.:]*)\b/i;
+
+function is_book_sutta_ref(ref: string): boolean {
+    return RE_ALL_BOOK_SUTTA_REF.test(ref);
+}
+
 function toggle_hide(selector: string): void {
   let el = document.querySelector(selector);
   if (el) {
@@ -108,6 +114,19 @@ function select_tab_elements(tab_div_selector: string,
   active_results.classList.remove("hide");
 }
 
+function strip_html(text: string): string {
+  text = text.replace(/<!doctype html>/gi, '');
+  text = text.replace(/<head.*?<\/head>/gs, '');
+  text = text.replace(/<style.*?<\/style>/gs, '');
+  text = text.replace(/<script.*?<\/script>/gs, '');
+  text = text.replace(/<!--.*?-->/gs, '');
+  text = text.replace(/<\/?\w[^>]*>/g, '');
+
+  text = text.replace(/ {2,}/g, ' ');
+
+  return text;
+}
+
 export {
   toggle_hide,
   set_listener,
@@ -118,4 +137,6 @@ export {
   set_clipboard_html,
   is_numeric,
   select_tab_elements,
+  strip_html,
+  is_book_sutta_ref,
 }

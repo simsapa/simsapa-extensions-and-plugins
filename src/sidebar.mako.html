@@ -42,27 +42,55 @@
       </div>
 
       <div class="block" id="button-bar">
-        <button id="copy-uid" class="button" type="button" title="Copy UID" style="min-width: 2em;">UID</button>
-        <button id="copy-word" class="button" type="button" title="Copy word">Word</button>
-        <button id="copy-meaning" class="button" type="button" title="Copy meaning">Meaning</button>
-        <button id="copy-gloss" class="button" type="button" title="Copy gloss line as table row">Gloss Line</button>
 
-        <button id="settings-btn" class="button icon-button" type="button" title="Show settings">
-          <svg class="icon-button__icon"><use xlink:href="#icon-gear-solid"></use></svg>
-        </button>
-      </div>
-
-      <div class="block hide" id="settings-wrap">
-        <label for="gloss-keys-csv"><b>Gloss keys csv list</b></label>
-        <input
-          class="input"
-          type="text"
-          name="gloss_keys_csv"
-          id="gloss-keys-csv"
-          style="width: 100%;"
-          value="id, pali_1, pos, grammar, meaning_1, construction"
+        <button
+          id="copy-uid"
+          title="Copy UID"
+          class="ssp-button ssp-icon-button"
         >
+          <svg class="ssp-icon-button__icon"><use xlink:href="#icon-hash-bold"></use></svg>
+        </button>
+
+        <button
+          id="copy-word"
+          title="Copy word"
+          class="ssp-button ssp-icon-button"
+        >
+          <svg class="ssp-icon-button__icon"><use xlink:href="#icon-letter-w"></use></svg>
+        </button>
+
+        <button
+          id="copy-meaning"
+          title="Copy meaning"
+          class="ssp-button ssp-icon-button"
+        >
+            <svg class="ssp-icon-button__icon"><use xlink:href="#icon-letter-m"></use></svg>
+        </button>
+
+        <button
+          id="copy-gloss"
+          title="Copy gloss line as table row"
+          class="ssp-button ssp-icon-button"
+        >
+          <svg class="ssp-icon-button__icon"><use xlink:href="#icon-table"></use></svg>
+        </button>
+
+        <!-- <button id="settings-btn" class="ssp-button ssp-icon-button" type="button" title="Show settings">
+             <svg class="ssp-icon-button__icon"><use xlink:href="#icon-gear-solid"></use></svg>
+             </button> -->
       </div>
+
+      <!-- <div class="block hide" id="settings-wrap">
+           <label for="gloss-keys-csv"><b>Gloss keys csv list</b></label>
+           <input
+           class="input"
+           type="text"
+           name="gloss_keys_csv"
+           id="gloss-keys-csv"
+           style="width: 100%;"
+           value="id, pali_1, pos, grammar, meaning_1, construction"
+           >
+           </div> -->
     </div>
 
     <div class="messages">
@@ -77,6 +105,10 @@
 
   <div class="block results-wrap" id="dict-results-wrap">
     <div class="block" id="dict-count"></div>
+    <div class="block hide" id="dict-deconstructor-wrap">
+      <p class="label"><b>Deconstructor Results:</b></p>
+      <div class="block" id="dict-deconstructor"></div>
+    </div>
     <div class="block" id="dict-results"></div>
   </div>
 </div>
@@ -99,29 +131,7 @@
   <div class="row footer"></div>
 </div>
 
-<svg style="display:none;">
-  <symbol id="icon-triangle-exclamation-solid" viewBox="0 0 512 512">
-    <path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"/>
-  </symbol>
-</svg>
-
-<svg style="display:none;">
-  <symbol id="icon-gear-solid" viewBox="0 0 512 512">
-    <path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"/>
-  </symbol>
-</svg>
-
-<svg style="display:none;">
-  <symbol id="icon-square-up-right-solid" viewBox="0 0 512 512">
-    <path d="M384 32c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96C0 60.7 28.7 32 64 32H384zM160 160c-6.5 0-12.3 3.9-14.8 9.9s-1.1 12.9 3.5 17.4l40 40-71 71C114 302 112 306.9 112 312s2 10 5.7 13.7l36.7 36.7c3.6 3.6 8.5 5.7 13.7 5.7s10-2 13.7-5.7l71-71 40 40c4.6 4.6 11.5 5.9 17.4 3.5s9.9-8.3 9.9-14.8V176c0-8.8-7.2-16-16-16H160z"/>
-  </symbol>
-</svg>
-
-<svg style="display:none;">
-  <symbol id="icon-copy-solid" viewBox="0 0 512 512">
-    <path d="M224 0c-35.3 0-64 28.7-64 64V288c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H224zM64 160c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H288c35.3 0 64-28.7 64-64V384H288v64H64V224h64V160H64z"/>
-  </symbol>
-</svg>
+<%include file="icons.html" />
 
 % if render_purpose == "addon":
 <script>

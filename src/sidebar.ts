@@ -37,12 +37,13 @@ const DATA = reactive({
   sutta_results: <SearchResult[]>[],
   sutta_count_msg: "",
   dict_results: <SearchResult[]>[],
+  dict_deconstructor: <string[]>[],
   dict_count_msg: "",
 });
 
 const IS_FIREFOX = (typeof browser !== "undefined");
 // const IS_CHROME = (typeof chrome !== "undefined" && chrome.hasOwnProperty('sidePanel'));
-const IS_OBSIDIAN = (typeof chrome !== "undefined" && !chrome.hasOwnProperty('sidePanel'));
+// const IS_OBSIDIAN = (typeof chrome !== "undefined" && !chrome.hasOwnProperty('sidePanel'));
 
 function select_tab(tab: Tab) {
   DATA.active_tab = tab;
@@ -129,12 +130,7 @@ function search_handler(min_length = 4): void {
   const el = <HTMLInputElement>document.getElementById(input_id)!;
   const query_text = el.value;
 
-  // FIXME check for sutta pattern
-  //
-  // def is_book_sutta_ref(ref: str) -> bool:
-  //     return (re.match(RE_ALL_BOOK_SUTTA_REF, ref) is not None)
-  // RE_ALL_BOOK_SUTTA_REF = re.compile(r'(?<!/)\b(DN|MN|SN|AN|Pv|Vv|Vism|iti|kp|khp|snp|th|thag|thig|ud|uda|dhp)[ \.]*(\d[\d\.:]*)\b', re.IGNORECASE)
-  if (query_text.startsWith('mn')) {
+  if (h.is_book_sutta_ref(query_text)) {
     min_length = 1;
   }
 
@@ -166,6 +162,13 @@ function search_handler(min_length = 4): void {
       } else {
         DATA.dict_count_msg = msg;
         DATA.dict_results = resp.results;
+        DATA.dict_deconstructor = resp.deconstructor;
+
+        if (DATA.dict_deconstructor.length != 0) {
+          document.getElementById('dict-deconstructor-wrap').classList.remove('hide');
+        } else {
+          document.getElementById('dict-deconstructor-wrap').classList.add('hide');
+        }
       }
     })
     .catch(error => console.error('Error:', error));
@@ -184,7 +187,6 @@ function show_sutta(uid: string): void {
   fetch(url).catch(error => console.error('Error:', error));
 }
 
-// FIXME use the /words/ route with ?window_type=Lookup+Window
 function show_word(uid: string): void {
   const url = SIMSAPA_BASE_URL + "/lookup_window_query";
   const data = { query_text: uid };
@@ -230,11 +232,17 @@ function results_item_template(item: ReactiveProxy<SearchResult>, idx: number) {
   `.key(item.schema_name + '.' + item.uid);
 }
 
+function deconstructor_item_template(item: ReactiveProxy<string>, _idx: number) {
+  return html`<div class="deconstructor-result"><b>${item}</b></div>`.key(item);
+}
+
 const sutta_results_template = html`<div>${() => DATA.sutta_results.map(results_item_template)}</div>`;
 const dict_results_template = html`<div>${() => DATA.dict_results.map(results_item_template)}</div>`;
+const dict_deconstructor_template = html`<div>${() => DATA.dict_deconstructor.map(deconstructor_item_template)}</div>`;
 
 sutta_results_template(document.getElementById('sutta-results')!);
 dict_results_template(document.getElementById('dict-results')!);
+dict_deconstructor_template(document.getElementById('dict-deconstructor')!);
 
 const sutta_count_template = html`<span>${() => DATA.sutta_count_msg}</span>`;
 sutta_count_template(document.getElementById('sutta-count')!);
@@ -242,26 +250,36 @@ sutta_count_template(document.getElementById('sutta-count')!);
 const dict_count_template = html`<span>${() => DATA.dict_count_msg}</span>`;
 dict_count_template(document.getElementById('dict-count')!);
 
-function copy_gloss(): void {
+async function copy_gloss() {
+  console.log("copy_gloss()");
+
   if (SELECTED_IDX === null) {
     return;
   }
 
-  const el = <HTMLInputElement | null>document.getElementById("gloss-keys-csv");
-  if (!el) {
-    return;
-  }
+  const url = SIMSAPA_BASE_URL + "/words/" + cr('uid') + ".json";
+  const item = await fetch(url)
+    .then(response => response.json())
+    .then(resp => {
+      if (resp.length == 0) {
+        return null;
+      } else{
+        return resp[0];
+      }
+    })
+    .catch(error => console.error('Error:', error));
 
-  const item_keys = el.value.split(",").map(i => i.trim());
+  // const el = <HTMLInputElement | null>document.getElementById("gloss-keys-csv");
+  // if (!el) {
+  //   return;
+  // }
 
-  const item_values = item_keys.map(key => DATA.dict_results[SELECTED_IDX!][key]);
+  // const item_keys = el.value.split(",").map(i => i.trim());
+  const item_keys = ['id', 'pali_1', 'pos', 'grammar', 'meaning_1', 'construction'];
 
-  if (IS_OBSIDIAN) {
-    // Copy Markdown format table text.
-    const md = "| " + item_values.join(" | ") + " |";
-    h.set_clipboard_text(md);
+  const item_values = item_keys.map(key => item[key]);
 
-  } else {
+  if (IS_FIREFOX) {
     // Copy a HTML table row.
     let html = "<table><tr><td>";
 
@@ -272,6 +290,12 @@ function copy_gloss(): void {
     const text = item_values.join("; ");
 
     h.set_clipboard_html(html, text);
+
+  } else {
+    // Copy Markdown format table text.
+    const md = "| " + item_values.join(" | ") + " |";
+    h.set_clipboard_text(md);
+
   }
 }
 
@@ -371,9 +395,9 @@ window.addEventListener("DOMContentLoaded", function () {
 
   h.set_click('#copy-uid', () => { h.set_clipboard_text(cr('uid')) });
   h.set_click('#copy-word', () => { h.set_clipboard_text(cr('title')) });
-  h.set_click('#copy-meaning', () => { h.set_clipboard_text(cr('snippet')) });
-  h.set_click('#settings-btn', () => { h.toggle_hide('#settings-wrap') });
-  h.set_click('#copy-gloss', copy_gloss);
+  h.set_click('#copy-meaning', () => { h.set_clipboard_text(h.strip_html(cr('snippet'))) });
+  h.set_click('#copy-gloss', () => { copy_gloss(); });
+  // h.set_click('#settings-btn', () => { h.toggle_hide('#settings-wrap') });
 
   h.set_click('#suttas-tab', () => { select_tab(Tab.Suttas) });
   h.set_click('#dictionary-tab', () => { select_tab(Tab.Dictionary) });

@@ -1,5 +1,6 @@
+@import 'base'
 @import 'typeahead-standalone-basic'
-@import 'button'
+@import 'ssp_button'
 @import 'input'
 
 $edge_gap: 12px
@@ -120,6 +121,18 @@ html, body
     flex-direction: row
     justify-content: space-between
     align-items: flex-start
+
+#deconstructor-wrap p.label
+    color: #000
+    background-color: #fff
+    padding: 0.25em $edge_gap
+    margin: 0
+
+.deconstructor-result
+  color: #000
+  background-color: #fff
+  padding: 0.25em $edge_gap
+  margin: 0
 
 .icon
   display: inline-block
