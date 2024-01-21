@@ -32,8 +32,13 @@ function set_click(selector: string,
 }
 
 function set_input(selector: string,
-                   listener_fn: (this: HTMLElement, ev: MouseEvent) => any): void {
+                   listener_fn: (this: HTMLElement, ev: Event) => any): void {
     set_listener(selector, 'input', listener_fn);
+}
+
+function set_change(selector: string,
+                    listener_fn: (this: HTMLElement, ev: Event) => any): void {
+    set_listener(selector, 'change', listener_fn);
 }
 
 function show_transient_message(text: string): void {
@@ -99,18 +104,21 @@ function select_tab_elements(tab_div_selector: string,
   tabs.forEach(el => el.classList.remove("selected"));
 
   let tab_el = document.querySelector(tab_div_selector);
+  if (!tab_el) { return; }
   tab_el.classList.add("selected");
 
   let controls = document.querySelectorAll(".controls");
   controls.forEach(el => el.classList.add("hide"));
 
   let active_controls = document.querySelector(controls_div_selector);
+  if (!active_controls) { return; }
   active_controls.classList.remove("hide");
 
   let results = document.querySelectorAll(".results-wrap");
   results.forEach(el => el.classList.add("hide"));
 
   let active_results = document.querySelector(results_div_selector);
+  if (!active_results) { return; }
   active_results.classList.remove("hide");
 }
 
@@ -132,6 +140,7 @@ export {
   set_listener,
   set_click,
   set_input,
+  set_change,
   show_transient_message,
   set_clipboard_text,
   set_clipboard_html,

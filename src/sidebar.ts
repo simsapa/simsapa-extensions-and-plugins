@@ -65,6 +65,71 @@ function select_tab(tab: Tab) {
   h.select_tab_elements(tab_el_sel, control_el_sel, results_el_sel);
 }
 
+function toggle_include_button(el_selector: string): void {
+  let el = document.querySelector(el_selector);
+  if (!el) { return; }
+
+  let is_active = el.classList.contains('active');
+  if (is_active) {
+    el.classList.remove('active');
+    el.textContent = "-";
+  } else{
+    el.classList.add('active');
+    el.textContent = "+";
+  }
+}
+
+function get_suttas_lang(): string | null {
+  const el = <HTMLSelectElement>document.querySelector("select[name='suttas-lang']");
+  const opt = el.selectedOptions.item(0);
+  if (!opt) {
+    return null;
+  } else if (opt.value == "Language") {
+    return null;
+  } else {
+    return opt.value;
+  }
+}
+
+function get_dict_lang(): string | null {
+  const el = <HTMLSelectElement>document.querySelector("select[name='dict-lang']");
+  const opt = el.selectedOptions.item(0);
+  if (!opt) {
+    return null;
+  } else if (opt.value == "Language") {
+    return null;
+  } else {
+    return opt.value;
+  }
+}
+
+function get_dict_dict(): string | null {
+  const el = <HTMLSelectElement>document.querySelector("select[name='dict-dict']");
+  const opt = el.selectedOptions.item(0);
+  if (!opt) {
+    return null;
+  } else if (opt.value == "Dictionaries") {
+    return null;
+  } else {
+    return opt.value;
+  }
+}
+
+function get_suttas_lang_include(): boolean {
+  const el = <HTMLElement>document.getElementById("suttas-lang-include");
+  return el.classList.contains("active");
+}
+
+function get_dict_lang_include(): boolean {
+  const el = <HTMLElement>document.getElementById("dict-lang-include");
+  return el.classList.contains("active");
+}
+
+function get_dict_dict_include(): boolean {
+  const el = <HTMLElement>document.getElementById("dict-dict-include");
+  return el.classList.contains("active");
+}
+
 if (IS_FIREFOX) {
   // Close the sidebar when the extension icon is clicked again.
   browser.action.onClicked.addListener(() => {
@@ -75,10 +140,8 @@ if (IS_FIREFOX) {
   browser.runtime.onMessage.addListener(function (message) {
     select_tab(Tab.Dictionary);
 
-    const el = <HTMLInputElement>document.getElementById('dict-query-text')!;
-    if (!el) {
-      return;
-    }
+    const el = <HTMLInputElement | null>document.getElementById('dict-query-text')!;
+    if (!el) { return; }
     el.value = message.query_text;
     search_handler();
   });
@@ -119,6 +182,15 @@ function search_handler(min_length = 4): void {
   let url: string;
   let input_id: string;
 
+  let suttas_lang = get_suttas_lang();
+  let suttas_lang_include = get_suttas_lang_include();
+
+  let dict_lang = get_dict_lang();
+  let dict_lang_include = get_dict_lang_include();
+
+  let dict_dict = get_dict_dict();
+  let dict_dict_include = get_dict_dict_include();
+
   if (DATA.active_tab == Tab.Suttas) {
     input_id = 'suttas-query-text';
     url = SIMSAPA_BASE_URL + "/suttas_fulltext_search";
@@ -138,7 +210,15 @@ function search_handler(min_length = 4): void {
     return;
   }
 
-  const data = { query_text: query_text };
+  const data = {
+    query_text: query_text,
+    suttas_lang: suttas_lang,
+    suttas_lang_include: suttas_lang_include,
+    dict_lang: dict_lang,
+    dict_lang_include: dict_lang_include,
+    dict_dict: dict_dict,
+    dict_dict_include: dict_dict_include,
+  };
 
   fetch(url, {
     method: "POST",
@@ -159,15 +239,18 @@ function search_handler(min_length = 4): void {
       if (DATA.active_tab == Tab.Suttas) {
         DATA.sutta_count_msg = msg;
         DATA.sutta_results = resp.results;
+
       } else {
         DATA.dict_count_msg = msg;
         DATA.dict_results = resp.results;
         DATA.dict_deconstructor = resp.deconstructor;
 
         if (DATA.dict_deconstructor.length != 0) {
-          document.getElementById('dict-deconstructor-wrap').classList.remove('hide');
+          const el = <HTMLElement>document.getElementById('dict-deconstructor-wrap');
+          el.classList.remove('hide');
         } else {
-          document.getElementById('dict-deconstructor-wrap').classList.add('hide');
+          const el = <HTMLElement>document.getElementById('dict-deconstructor-wrap');
+          el.classList.add('hide');
         }
       }
     })
@@ -203,7 +286,9 @@ function show_word(uid: string): void {
 
 function search_selection(): void {
   select_tab(Tab.Dictionary);
-  let selected_text = window.getSelection().toString();
+  const sel = window.getSelection();
+  if (!sel) { return; }
+  let selected_text = sel.toString();
   const el = <HTMLInputElement>document.getElementById('dict-query-text')!;
   el.value = selected_text;
   search_handler();
@@ -354,8 +439,11 @@ function server_online_init() {
   let arr = document.querySelectorAll(".typeahead-standalone .tt-list");
   arr.forEach((el) => {
     // Increase the width to 350px.
-    let style = el.getAttribute('style').replace(/width:[^;]+;/, 'width: 350px;');
-    el.setAttribute('style', style);
+    let st = el.getAttribute('style');
+    if (st) {
+      let style = st.replace(/width:[^;]+;/, 'width: 350px;');
+      el.setAttribute('style', style);
+    }
   });
 
   h.set_input('#suttas-query-text', function() {
@@ -375,8 +463,12 @@ function check_server() {
   fetch(SIMSAPA_BASE_URL)
     .then(response => {
       if (response.ok) {
-        document.getElementById('main-wrap').classList.remove('hide');
-        document.getElementById('server-offline').classList.add('hide');
+        let el = <HTMLElement>document.getElementById('main-wrap');
+        el.classList.remove('hide');
+
+        el = <HTMLElement>document.getElementById('server-offline');
+        el.classList.add('hide');
+
         clearTimeout(SERVER_CHECK_TIMEOUT);
         server_online_init();
 
@@ -385,8 +477,11 @@ function check_server() {
       }
     })
     .catch(_error => {
-      document.getElementById('main-wrap').classList.add('hide');
-      document.getElementById('server-offline').classList.remove('hide');
+      let el = <HTMLElement>document.getElementById('main-wrap');
+      el.classList.add('hide');
+
+      el = <HTMLElement>document.getElementById('server-offline');
+      el.classList.remove('hide');
     });
 }
 
@@ -401,4 +496,23 @@ window.addEventListener("DOMContentLoaded", function () {
 
   h.set_click('#suttas-tab', () => { select_tab(Tab.Suttas) });
   h.set_click('#dictionary-tab', () => { select_tab(Tab.Dictionary) });
+
+  h.set_click('#suttas-lang-include', () => {
+    toggle_include_button('#suttas-lang-include');
+    search_handler();
+  });
+
+  h.set_click('#dict-lang-include', () => {
+    toggle_include_button('#dict-lang-include');
+    search_handler();
+  });
+
+  h.set_click('#dict-dict-include', () => {
+    toggle_include_button('#dict-dict-include');
+    search_handler();
+  });
+
+  h.set_change("select[name='suttas-lang']", () => { search_handler(); });
+  h.set_change("select[name='dict-lang']", () => { search_handler(); });
+  h.set_change("select[name='dict-dict']", () => { search_handler(); });
 });

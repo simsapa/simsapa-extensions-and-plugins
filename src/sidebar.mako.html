@@ -34,11 +34,59 @@
       <div class="block form-group">
         <input id="suttas-query-text" class="input" type="search" placeholder="Sutta query" style="width: 100%;" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048">
       </div>
+
+      <div class="block" id="suttas-extras">
+          <button
+            id="suttas-lang-include"
+            class="flex-item active"
+            title="+ means 'must include', - means 'must exclude'"
+          >+</button>
+
+          <select class="flex-item" name="suttas-lang">
+            <option value="Language">Language</option>
+            <option value="en">en</option>
+            <option value="pli">pli</option>
+          </select>
+      </div>
     </div>
 
     <div id="dict-controls" class="controls">
       <div class="block form-group">
         <input id="dict-query-text" class="input" type="search" placeholder="Dictionary query" style="width: 100%;" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048">
+      </div>
+
+      <div class="block" id="dict-extras">
+          <button
+            id="dict-lang-include"
+            class="flex-item active"
+            title="+ means 'must include', - means 'must exclude'"
+          >+</button>
+
+          <select class="flex-item" name="dict-lang">
+            <option value="Language">Language</option>
+            <option value="en">en</option>
+            <option value="ru">ru</option>
+          </select>
+
+          <button
+            id="dict-dict-include"
+            class="flex-item active"
+            title="+ means 'must include', - means 'must exclude'"
+          >+</button>
+
+          <select class="flex-item" name="dict-dict">
+            <option value="Dictionaries">Dictionaries</option>
+            <option value="cpd">cpd</option>
+            <option value="dpd">dpd</option>
+            <option value="dppn">dppn</option>
+            <option value="mw">mw</option>
+            <option value="ncped">ncped</option>
+            <option value="nyanat">nyanat</option>
+            <option value="pts">pts</option>
+            <option value="sbs-ru">sbs-ru</option>
+            <option value="whitney">whitney</option>
+            <option value="wn">wn</option>
+          </select>
       </div>
 
       <div class="block" id="button-bar">
