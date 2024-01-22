@@ -342,7 +342,8 @@ async function copy_gloss() {
     return;
   }
 
-  const url = SIMSAPA_BASE_URL + "/words/" + cr('uid') + ".json";
+  const uid = cr('uid');
+  const url = SIMSAPA_BASE_URL + "/words/" + uid + ".json";
   const item = await fetch(url)
     .then(response => response.json())
     .then(resp => {
@@ -354,15 +355,40 @@ async function copy_gloss() {
     })
     .catch(error => console.error('Error:', error));
 
+  // NOTE: ignore gloss-keys-csv for now
+
   // const el = <HTMLInputElement | null>document.getElementById("gloss-keys-csv");
   // if (!el) {
   //   return;
   // }
 
   // const item_keys = el.value.split(",").map(i => i.trim());
-  const item_keys = ['id', 'pali_1', 'pos', 'grammar', 'meaning_1', 'construction'];
 
-  const item_values = item_keys.map(key => item[key]);
+  let item_values = [];
+
+  if (uid.endsWith('/dpd')) {
+    const item_keys = ['uid', 'pali_1', 'pos', 'grammar', 'meaning_1', 'construction'];
+    item_values = item_keys.map(key => item[key]);
+
+  } else {
+    const item_keys = ['uid', 'word', '', '', 'definition_plain', ''];
+    item_values = item_keys.map(key => {
+      if (key == '') {
+        return '';
+
+      } else if (item.hasOwnProperty(key)) {
+        let s: string = '' + item[key] + '';
+        if (s.length <= 100) {
+          return s;
+        } else {
+          return s.slice(0, 100) + " ...";
+        }
+
+      } else {
+        return '';
+      }
+    });
+  }
 
   if (IS_FIREFOX) {
     // Copy a HTML table row.
