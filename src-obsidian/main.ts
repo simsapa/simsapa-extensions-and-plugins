@@ -1,7 +1,7 @@
 import * as path from "path";
 
 import { Plugin, WorkspaceLeaf } from 'obsidian';
-import { SimsapaView, VIEW_TYPE_SIMSAPA } from 'simsapa-view';
+import { SERVER_PORT, SimsapaView, VIEW_TYPE_SIMSAPA } from 'simsapa-view';
 
 import { getPluginAbsolutePath, isWindows } from 'Common';
 
@@ -79,7 +79,7 @@ export default class SimsapaPlugin extends Plugin {
 		})
 		this.server = server;
 
-		server.listen(5000);
+		server.listen(SERVER_PORT);
 	}
 
 	public getPluginId() {

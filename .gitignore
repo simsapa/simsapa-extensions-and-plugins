@@ -1,7 +1,9 @@
 # Build targets
+dist/
 dist-addon/
 dist-firefox/
 dist-chrome/
+dist-obsidian/
 dist-obsidian/
 src/sidebar.css
 src/sidebar.css.map

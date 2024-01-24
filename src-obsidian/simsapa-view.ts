@@ -1,5 +1,7 @@
 import { ItemView, WorkspaceLeaf } from "obsidian";
 
+export const SERVER_PORT = 5353;
+
 export const VIEW_TYPE_SIMSAPA = "simsapa-view";
 
 export class SimsapaView extends ItemView {
@@ -26,7 +28,7 @@ export class SimsapaView extends ItemView {
         container.appendChild(title)
 
         let iframe = document.createElement('iframe');
-        iframe.src = 'http://localhost:5000/sidebar.html';
+        iframe.src = `http://localhost:${SERVER_PORT}/sidebar.html`;
         iframe.allow = "clipboard-write"
 
         container.appendChild(iframe)

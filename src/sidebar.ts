@@ -42,7 +42,7 @@ const DATA = reactive({
 });
 
 const IS_FIREFOX = (typeof browser !== "undefined");
-// const IS_CHROME = (typeof chrome !== "undefined" && chrome.hasOwnProperty('sidePanel'));
+const IS_CHROME = (typeof chrome !== "undefined" && chrome.hasOwnProperty('sidePanel'));
 // const IS_OBSIDIAN = (typeof chrome !== "undefined" && !chrome.hasOwnProperty('sidePanel'));
 
 function select_tab(tab: Tab) {
@@ -138,6 +138,18 @@ if (IS_FIREFOX) {
 
   // Receive the selected word from the double click event handler.
   browser.runtime.onMessage.addListener(function (message) {
+    select_tab(Tab.Dictionary);
+
+    const el = <HTMLInputElement | null>document.getElementById('dict-query-text')!;
+    if (!el) { return; }
+    el.value = message.query_text;
+    search_handler();
+  });
+}
+
+if (IS_CHROME) {
+  // Receive the selected word from the double click event handler.
+  chrome.runtime.onMessage.addListener(function (message) {
     select_tab(Tab.Dictionary);
 
     const el = <HTMLInputElement | null>document.getElementById('dict-query-text')!;

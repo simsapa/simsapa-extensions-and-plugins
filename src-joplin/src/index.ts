@@ -2,6 +2,8 @@ import joplin from 'api';
 import { MenuItemLocation, ToolbarButtonLocation } from 'api/types';
 import * as path from 'path';
 
+const SERVER_PORT = 5353;
+
 interface AppObj {
     server: Object;
 }
@@ -36,7 +38,7 @@ joplin.plugins.register({
 
             app.server = server;
 
-            server.listen(5000);
+            server.listen(SERVER_PORT);
         }
 
         start_static_server(app);
@@ -47,7 +49,7 @@ joplin.plugins.register({
         const html = `
 <div style="height: calc(100vh - 50px);" class="simsapa-view-wrap">
     <div class="sidebar-title">Simsapa</div>
-    <iframe src="http://localhost:5000/sidebar.html" allow="clipboard-write"></iframe>
+    <iframe src="http://localhost:${SERVER_PORT}/sidebar.html" allow="clipboard-write"></iframe>
 </div>`
 
         await joplin.views.panels.setHtml(panel, html);

@@ -37,6 +37,7 @@ dist-firefox: sidebar.css sidebar.js sidebar.html-firefox
 	cp src/docs-user-style.css dist-firefox/
 	cp src/manifest-firefox.json dist-firefox/manifest.json
 	web-ext lint --source-dir dist-firefox/
+	web-ext build --overwrite-dest --source-dir dist-firefox/ --artifacts-dir dist/ --filename simsapa-firefox.zip
 
 dist-chrome: sidebar.css sidebar.js sidebar.html-firefox
 	cp dist-firefox/sidebar.css dist-chrome/
@@ -44,8 +45,12 @@ dist-chrome: sidebar.css sidebar.js sidebar.html-firefox
 	cp dist-firefox/sidebar.js dist-chrome/
 	cp -r src/icons/ dist-chrome/
 	cp src/background.js dist-chrome/
+	cp src/content-script.js dist-chrome/
 	cp src/docs-user-style.css dist-chrome/
 	cp src/manifest-chrome.json dist-chrome/manifest.json
+	mv dist-chrome simsapa-chrome
+	zip -r dist/simsapa-chrome.zip simsapa-chrome/
+	mv simsapa-chrome dist-chrome
 
 main.js-obsidian:
 	cd src-obsidian && npm run build
@@ -60,6 +65,9 @@ dist-obsidian: sidebar.css sidebar.js sidebar.html-firefox main.js-obsidian styl
 	cp dist-firefox/sidebar.js dist-obsidian/static/
 	cp src-obsidian/main.js dist-obsidian/
 	cp src-obsidian/manifest.json dist-obsidian/
+	mv dist-obsidian/ simsapa-obsidian-plugin/
+	zip -r dist/simsapa-obsidian-plugin.zip simsapa-obsidian-plugin/
+	mv simsapa-obsidian-plugin/ dist-obsidian/
 
 dist-joplin: sidebar.css sidebar.js sidebar.html-firefox styles.css
 	mkdir -p src-joplin/src/static/

@@ -25,6 +25,10 @@
         {
             "matches": ["*://docs.google.com/*"],
             "css": ["docs-user-style.css"]
+        },
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content-script.js"]
         }
     ],
     "permissions": [
