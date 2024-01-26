@@ -1,0 +1,139 @@
+$text_color: #000
+$bg_color: #fff
+$result_selected_bg: hsl(198, 75%, 80%)
+$match_bg: #ff0
+$c_13: lighten(#000, 13%)
+$c_45: lighten(#000, 45%)
+$c_55: lighten(#000, 55%)
+$c_60: lighten(#000, 60%)
+$c_85: lighten(#000, 85%)
+$c_93: lighten(#000, 93%)
+
+@mixin dark-light-mode($mode)
+  @if $mode == light
+    $text_color: #000 !global
+    $bg_color: #fff !global
+    $result_selected_bg: hsl(198, 75%, 80%) !global
+    $match_bg: #ff0 !global
+    $c_13: lighten(#000, 13%) !global
+    $c_45: lighten(#000, 45%) !global
+    $c_55: lighten(#000, 55%) !global
+    $c_60: lighten(#000, 60%) !global
+    $c_85: lighten(#000, 85%) !global
+    $c_93: lighten(#000, 93%) !global
+
+    .show-if-dark
+      display: none
+
+    .show-if-light
+      display: block
+
+  @else
+    $text_color: #fff !global
+    $bg_color: hsl(0, 0%, 10%) !global
+    $result_selected_bg: hsl(198, 75%, 20%) !global
+    $match_bg: #007a31 !global
+    $c_13: darken(#fff, 13%) !global
+    $c_45: darken(#fff, 45%) !global
+    $c_55: darken(#fff, 55%) !global
+    $c_60: darken(#fff, 60%) !global
+    $c_85: darken(#fff, 85%) !global
+    $c_93: darken(#fff, 93%) !global
+
+    .show-if-dark
+      display: block
+
+    .show-if-light
+      display: none
+
+  body
+    color: $text_color
+    background-color: $bg_color
+
+  .page
+    color: $text_color
+    background-color: $bg_color
+
+  .header,
+  .footer
+    color: $text_color
+    background-color: $bg_color
+
+  #simsapa-sidebar .controls-container
+    color: $text_color
+    background-color: $bg_color
+
+  .search-result
+    color: $text_color
+    background-color: $bg_color
+    border-bottom: 1px solid $c_55
+
+    @if $mode == light
+      &:nth-child(2n)
+        background-color: $c_93
+    @else
+      &:nth-child(2n)
+        background-color: hsl(0, 0%, 17%)
+
+    &.selected
+      background-color: $result_selected_bg
+
+  #deconstructor-wrap p.label
+    color: $text_color
+    background-color: $bg_color
+
+  .deconstructor-result
+    color: $text_color
+    background-color: $bg_color
+
+  span.match
+    background-color: $match_bg
+
+  .tabs
+    border-bottom: 2px solid $c_45
+
+    @if $mode == light
+      .tab
+        color: $text_color
+        background-color: $c_85
+
+      .tab.selected
+        color: $bg_color
+        background-color: $c_45
+
+    @else
+      .tab
+        color: hsl(0, 0%, 50%)
+        background-color: $c_85
+
+      .tab.selected
+        color: $text_color
+        background-color: $c_45
+
+  #dark-mode-toggle
+    color: $text_color
+    background-color: $bg_color
+    border: 1px solid $text_color
+
+  #suttas-extras,
+  #dict-extras
+    @if $mode == light
+      button, select
+        border: 1px solid $c_60
+        color: $text_color
+
+        &.active
+          background-color: $c_45
+          color: $bg_color
+
+    @else
+      button, select
+        border: 1px solid $c_60
+        color: $bg_color
+
+        &.active
+          background-color: $c_45
+          color: $text_color
+
+  .typeahead-standalone input
+    color: $text_color

@@ -2,6 +2,7 @@
 @import 'typeahead-standalone-basic'
 @import 'ssp_button'
 @import 'input'
+@import 'dark_light_mode_mixin'
 
 $edge_gap: 12px
 
@@ -40,8 +41,6 @@ html, body
   flex: 0 1 40px
 
 .page
-  color: #000
-  background-color: #fff
   padding-left: 0
   padding-right: 0
 
@@ -51,11 +50,6 @@ html, body
 
 #server-offline
   text-align: center
-
-.header,
-.footer
-  color: #fff
-  background-color: #222
 
 .content
   padding: 0.5rem 0
@@ -69,7 +63,6 @@ html, body
   left: 0
   padding: 1rem 0 0.5rem 0
   z-index: 10000
-  background-color: #fff
   width: 100%
 
 #sutta-results-wrap
@@ -104,17 +97,8 @@ html, body
   padding: 0.5em $edge_gap
 
 .search-result
-  color: #000
-  background-color: #fff
   padding: 0.5em $edge_gap
   margin: 0
-  border-bottom: 1px solid #888
-
-  &:nth-child(2n)
-    background-color: #eeeeee
-
-  &.selected
-    background-color: #a6dbf2
 
   .result-header
     display: flex
@@ -123,14 +107,10 @@ html, body
     align-items: flex-start
 
 #deconstructor-wrap p.label
-    color: #000
-    background-color: #fff
     padding: 0.25em $edge_gap
     margin: 0
 
 .deconstructor-result
-  color: #000
-  background-color: #fff
   padding: 0.25em $edge_gap
   margin: 0
 
@@ -142,24 +122,17 @@ html, body
   stroke: currentColor
   fill: currentColor
 
-span.match
-  background-color: yellow
-
 .hide
   display: none
 
 .tabs
   display: flex
-  border-bottom: 2px solid #737373
   margin-bottom: 0.5rem
 
   .tab
     cursor: pointer
     padding: 5px 30px
-    color: #000
     font-size: 1rem
-
-    background-color: #ddd
     border-radius: 8px 8px 0 0
 
     &:first-child
@@ -168,9 +141,12 @@ span.match
       margin-right: $edge_gap
 
   .tab.selected
-    color: #fff
-    background-color: #737373
     border-radius: 8px 8px 0 0
+
+  #dark-mode-toggle-wrap
+    margin-left: auto
+    margin-right: $edge_gap
+    cursor: pointer
 
 #suttas-extras,
 #dict-extras
@@ -188,9 +164,23 @@ span.match
     padding: 0.25rem 0.6rem
     font-size: 1rem
     border-radius: 7px
-    border: 1px solid #999
-    color: #000
 
-    &.active
-      background-color: #737373
-      color: white
+// When the system's setting is 'dark'
+@media (prefers-color-scheme: dark)
+  @include dark-light-mode(dark)
+
+  // But the user toggles the button to 'light'
+  body.light-mode
+    color: #000
+    background-color: #fff
+    @include dark-light-mode(light)
+
+// When the system's setting is 'light'
+@media (prefers-color-scheme: light)
+  @include dark-light-mode(light)
+
+  // But the user toggles the button to 'dark'
+  body.dark-mode
+    color: #fff
+    background-color: hsl(0, 0%, 10%)
+    @include dark-light-mode(dark)

@@ -12,6 +12,30 @@ let SELECTED_IDX: number | null = null;
 let TYPING_TIMEOUT: ReturnType<typeof setInterval> = setTimeout(() => {}, 1);
 let SERVER_CHECK_TIMEOUT: ReturnType<typeof setInterval> = setTimeout(() => {}, 1);
 
+function set_dark_mode(set_dark: boolean) {
+  if (set_dark) {
+    document.body.classList.add('dark-mode');
+    document.body.classList.remove('light-mode');
+    localStorage.setItem('color-scheme', 'dark');
+  } else {
+    document.body.classList.remove('dark-mode');
+    document.body.classList.add('light-mode');
+    localStorage.setItem('color-scheme', 'light');
+  }
+}
+
+if (typeof window.matchMedia !== "undefined") {
+  const color_scheme = localStorage.getItem('color-scheme');
+  if (color_scheme === null) {
+    // MediaQueryList { media: '(prefers-color-scheme: dark)', matches: true, onchange: null }
+    const query = window.matchMedia("(prefers-color-scheme: dark)");
+    query.addEventListener('change', (event) => set_dark_mode(event.matches));
+    set_dark_mode(query.matches);
+  } else {
+    set_dark_mode(color_scheme == 'dark');
+  }
+}
+
 interface SearchResult {
     uid: string;
     schema_name: string;
@@ -548,6 +572,10 @@ window.addEventListener("DOMContentLoaded", function () {
   h.set_click('#dict-dict-include', () => {
     toggle_include_button('#dict-dict-include');
     search_handler();
+  });
+
+  h.set_click('#dark-mode-toggle', () => {
+    set_dark_mode(!document.body.classList.contains('dark-mode'));
   });
 
   h.set_change("select[name='suttas-lang']", () => { search_handler(); });
