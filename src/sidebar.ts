@@ -446,6 +446,33 @@ async function copy_gloss() {
   }
 }
 
+function add_options(selector: string, option_labels: string[]): void {
+  let select_el = document.querySelector(selector);
+  if (!select_el) {
+    console.error("Cannot find: " + selector);
+    return;
+  }
+
+  option_labels.forEach(label => {
+    let el = <HTMLOptionElement>document.createElement('option');
+    el.value = label;
+    el.text = label;
+    select_el?.appendChild(el);
+  });
+}
+
+function sutta_and_dict_search_options_init() {
+  fetch(SIMSAPA_BASE_URL + "/sutta_and_dict_search_options")
+    .then(resp => resp.json())
+    .then(resp => {
+      // Not templating the <select> element because that would lose the already
+      // bound onchange event handler.
+      add_options("select[name='suttas-lang']", resp.sutta_languages);
+      add_options("select[name='dict-lang']", resp.dict_languages);
+      add_options("select[name='dict-dict']", resp.dict_sources);
+    });
+}
+
 function server_online_init() {
   const suttas_input_el = <HTMLInputElement>document.getElementById("suttas-query-text");
   const dict_input_el = <HTMLInputElement>document.getElementById("dict-query-text");
@@ -519,6 +546,8 @@ function server_online_init() {
   });
 
   window.addEventListener('dblclick', search_selection);
+
+  sutta_and_dict_search_options_init();
 }
 
 function check_server() {
