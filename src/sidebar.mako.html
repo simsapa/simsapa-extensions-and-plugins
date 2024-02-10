@@ -41,8 +41,20 @@
     </div>
 
     <div id="suttas-controls" class="controls hide">
-      <div class="block form-group">
-        <input id="suttas-query-text" class="input" type="search" placeholder="Sutta query" style="width: 100%;" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048">
+      <div style="display: flex;">
+        <div style="flex-grow: 1;">
+          <input id="suttas-query-text" class="input" type="search" placeholder="Sutta query" style="width: 100%;" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048">
+        </div>
+
+        <div style="margin-left: 0.5rem; margin-top: 0.2rem;">
+          <button
+            id="suttas-search-submit"
+            title="Search"
+            class="ssp-button ssp-icon-button"
+          >
+            <svg class="ssp-icon-button__icon"><use xlink:href="#icon-search"></use></svg>
+          </button>
+        </div>
       </div>
 
       <div class="block" id="suttas-extras">
@@ -61,8 +73,20 @@
     </div>
 
     <div id="dict-controls" class="controls">
-      <div class="block form-group">
-        <input id="dict-query-text" class="input" type="search" placeholder="Dictionary query" style="width: 100%;" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048">
+      <div style="display: flex;">
+        <div style="flex-grow: 1;">
+          <input id="dict-query-text" class="input" type="search" placeholder="Dictionary query" style="width: 100%;" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048">
+        </div>
+
+        <div style="margin-left: 0.5rem; margin-top: 0.2rem;">
+          <button
+            id="dict-search-submit"
+            title="Search"
+            class="ssp-button ssp-icon-button"
+          >
+            <svg class="ssp-icon-button__icon"><use xlink:href="#icon-search"></use></svg>
+          </button>
+        </div>
       </div>
 
       <div class="block" id="dict-extras">
@@ -75,6 +99,7 @@
           <select class="flex-item" name="dict-lang">
             <option value="Language">Language</option>
             <option value="en">en</option>
+            <option value="pli">pli</option>
             <option value="ru">ru</option>
           </select>
 
@@ -86,6 +111,7 @@
 
           <select class="flex-item" name="dict-dict">
             <option value="Dictionaries">Dictionaries</option>
+            <option value="comm">comm</option>
             <option value="cpd">cpd</option>
             <option value="dpd">dpd</option>
             <option value="dppn">dppn</option>

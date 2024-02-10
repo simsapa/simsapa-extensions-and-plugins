@@ -578,6 +578,9 @@ window.addEventListener("DOMContentLoaded", function () {
     set_dark_mode(!document.body.classList.contains('dark-mode'));
   });
 
+  h.set_click('#suttas-search-submit', () => { search_handler(2); });
+  h.set_click('#dict-search-submit', () => { search_handler(2); });
+
   h.set_change("select[name='suttas-lang']", () => { search_handler(); });
   h.set_change("select[name='dict-lang']", () => { search_handler(); });
   h.set_change("select[name='dict-dict']", () => { search_handler(); });
