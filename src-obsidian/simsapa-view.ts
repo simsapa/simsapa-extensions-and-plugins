@@ -1,6 +1,7 @@
 import { ItemView, WorkspaceLeaf } from "obsidian";
 
 export const SERVER_PORT = 5353;
+export const WS_SERVER_PORT = 5354;
 
 export const VIEW_TYPE_SIMSAPA = "simsapa-view";
 

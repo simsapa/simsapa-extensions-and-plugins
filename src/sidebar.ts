@@ -6,6 +6,7 @@ import _assets_dict_words from "./assets/dict_words_flat_completion_list.json";
 const dict_words_flat_completion_list = _assets_dict_words as string[];
 
 const SIMSAPA_BASE_URL = "http://localhost:4848";
+const OBSIDIAN_PLUGIN_WS_URL = "ws://localhost:5354";
 const SEARCH_TIMER_SPEED = 400;
 let SELECTED_IDX: number | null = null;
 
@@ -67,7 +68,7 @@ const DATA = reactive({
 
 const IS_FIREFOX = (typeof browser !== "undefined");
 const IS_CHROME = (typeof chrome !== "undefined" && chrome.hasOwnProperty('sidePanel'));
-// const IS_OBSIDIAN = (typeof chrome !== "undefined" && !chrome.hasOwnProperty('sidePanel'));
+const IS_OBSIDIAN = (typeof chrome !== "undefined" && !chrome.hasOwnProperty('sidePanel'));
 
 function select_tab(tab: Tab) {
   DATA.active_tab = tab;
@@ -154,6 +155,14 @@ function get_dict_dict_include(): boolean {
   return el.classList.contains("active");
 }
 
+function set_query_and_search_dictionary(query_text: string): void {
+    select_tab(Tab.Dictionary);
+    const el = <HTMLInputElement | null>document.getElementById('dict-query-text')!;
+    if (!el) { return; }
+    el.value = query_text;
+    search_handler();
+}
+
 if (IS_FIREFOX) {
   // Close the sidebar when the extension icon is clicked again.
   browser.action.onClicked.addListener(() => {
@@ -162,25 +171,26 @@ if (IS_FIREFOX) {
 
   // Receive the selected word from the double click event handler.
   browser.runtime.onMessage.addListener(function (message) {
-    select_tab(Tab.Dictionary);
-
-    const el = <HTMLInputElement | null>document.getElementById('dict-query-text')!;
-    if (!el) { return; }
-    el.value = message.query_text;
-    search_handler();
+    set_query_and_search_dictionary(message.query_text);
   });
 }
 
 if (IS_CHROME) {
   // Receive the selected word from the double click event handler.
   chrome.runtime.onMessage.addListener(function (message) {
-    select_tab(Tab.Dictionary);
-
-    const el = <HTMLInputElement | null>document.getElementById('dict-query-text')!;
-    if (!el) { return; }
-    el.value = message.query_text;
-    search_handler();
+    set_query_and_search_dictionary(message.query_text);
   });
+}
+
+if (IS_OBSIDIAN) {
+  const ws = new WebSocket(OBSIDIAN_PLUGIN_WS_URL);
+  // ws.onopen = function() {
+  //   console.log("Websocket connection opened.");
+  // };
+
+  ws.onmessage = function(event) {
+    set_query_and_search_dictionary(event.data);
+  };
 }
 
 // Returns the value for 'key' from the selected result,

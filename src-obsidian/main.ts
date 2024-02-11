@@ -1,12 +1,15 @@
 import * as path from "path";
 
-import { Plugin, WorkspaceLeaf } from 'obsidian';
-import { SERVER_PORT, SimsapaView, VIEW_TYPE_SIMSAPA } from 'simsapa-view';
+import { Editor, MarkdownView, Plugin, WorkspaceLeaf } from 'obsidian';
+import { SERVER_PORT, SimsapaView, VIEW_TYPE_SIMSAPA, WS_SERVER_PORT } from './simsapa-view';
 
-import { getPluginAbsolutePath, isWindows } from 'Common';
+import { getPluginAbsolutePath, isWindows } from './Common';
+import { WebSocketServer } from "ws";
 
 export default class SimsapaPlugin extends Plugin {
 	server: any;
+	ws_server: any;
+	ws_sockets: any[];
 
 	async onload() {
 		this.registerView(
@@ -20,23 +23,33 @@ export default class SimsapaPlugin extends Plugin {
 		ribbon_icon_el.addClass('my-plugin-ribbon-class');
 
 		this.addCommand({
-			id: 'open-simsapa-sidebar',
-			name: 'Open Simsapa Sidebar',
+			id: 'simsapa-open-sidebar',
+			name: 'Simsapa: Open Sidebar',
 			callback: () => {
 				this.activate_simsapa_view();
 			}
 		});
 
-		this.start_static_server();
+		this.addCommand({
+			id: 'simsapa-lookup-selection-in-dictionary',
+			name: 'Simsapa: Lookup Selection in Dictionary',
 
-		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
-		// Using this function will automatically remove the event listener when this plugin is disabled.
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			console.log('click', evt);
+			// Linux, Windows: Ctrl+Shift+D
+			// MacOS: Cmd+Shift+D
+			hotkeys: [{ modifiers: ["Mod", "Shift"], key: "d" }],
+			editorCallback: (editor: Editor, _view: MarkdownView) => {
+				const sel = editor.getSelection()
+				this.ws_sockets.forEach(s => s.send(`${sel}`));
+			},
 		});
 
-		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
+		this.start_static_server();
+		this.start_websocket_server();
+
+		this.registerDomEvent(document, 'dblclick', () => {
+			const sel = document.getSelection();
+			this.ws_sockets.forEach(s => s.send(`${sel}`));
+		});
 	}
 
 	onunload() {
@@ -80,6 +93,20 @@ export default class SimsapaPlugin extends Plugin {
 		this.server = server;
 
 		server.listen(SERVER_PORT);
+	}
+
+	async start_websocket_server() {
+		this.ws_server = new WebSocketServer({ port: WS_SERVER_PORT });
+		this.ws_sockets = [];
+
+		this.ws_server.on('connection', (socket: any) => {
+			this.ws_sockets.push(socket);
+
+			// When a socket closes, or disconnects, remove it from the array.
+			socket.on('close', () => {
+				this.ws_sockets = this.ws_sockets.filter((s: any) => s !== socket);
+			});
+		});
 	}
 
 	public getPluginId() {
