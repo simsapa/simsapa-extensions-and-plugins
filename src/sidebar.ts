@@ -190,11 +190,7 @@ if (IS_OBSIDIAN) {
 
   ws.onmessage = function(event) {
     const data = JSON.parse(event.data);
-    if (data.settings.lookup_using_simsapa) {
-      show_word(data.selection);
-    } else {
-      set_query_and_search_dictionary(data.selection);
-    }
+    set_query_and_search_dictionary(data.selection);
   };
 }
 

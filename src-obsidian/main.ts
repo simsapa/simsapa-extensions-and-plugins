@@ -1,18 +1,10 @@
 import * as path from "path";
 
-import { App, Editor, MarkdownView, Plugin, PluginSettingTab, Setting, WorkspaceLeaf } from 'obsidian';
+import { Editor, MarkdownView, Plugin, WorkspaceLeaf } from 'obsidian';
 import { SERVER_PORT, SimsapaView, VIEW_TYPE_SIMSAPA, WS_SERVER_PORT } from './simsapa-view';
 
 import { getPluginAbsolutePath, isWindows } from './Common';
 import { WebSocketServer } from "ws";
-
-interface SimsapaPluginSettings {
-	lookup_using_simsapa: boolean;
-}
-
-const SIMSAPA_DEFAULT_SETTINGS: SimsapaPluginSettings = {
-	lookup_using_simsapa: false
-}
 
 function sanitize_selection(text: string): string {
 	// Remove Markdown syntax which may be part of a double-click selection.
@@ -20,14 +12,11 @@ function sanitize_selection(text: string): string {
 }
 
 export default class SimsapaPlugin extends Plugin {
-	settings: SimsapaPluginSettings
 	server: any;
 	ws_server: any;
 	ws_sockets: any[];
 
 	async onload() {
-		await this.load_settings();
-
 		this.registerView(
 			VIEW_TYPE_SIMSAPA,
 			(leaf) => new SimsapaView(leaf),
@@ -57,13 +46,10 @@ export default class SimsapaPlugin extends Plugin {
 				const sel = editor.getSelection()
 				const data = JSON.stringify({
 					"selection": sanitize_selection(`${sel}`),
-					"settings": this.settings,
 				});
 				this.ws_sockets.forEach(s => s.send(data));
 			},
 		});
-
-		this.addSettingTab(new SimsapaSettingTab(this.app, this));
 
 		this.start_static_server();
 		this.start_websocket_server();
@@ -72,7 +58,6 @@ export default class SimsapaPlugin extends Plugin {
 			const sel = document.getSelection();
 			const data = JSON.stringify({
 				"selection": sanitize_selection(`${sel}`),
-				"settings": this.settings,
 			});
 			this.ws_sockets.forEach(s => s.send(data));
 		});
@@ -80,14 +65,6 @@ export default class SimsapaPlugin extends Plugin {
 
 	onunload() {
 		this.server.close();
-	}
-
-	async load_settings() {
-		this.settings = Object.assign({}, SIMSAPA_DEFAULT_SETTINGS, await this.loadData());
-	}
-
-	async save_settings() {
-		await this.saveData(this.settings);
 	}
 
 	async activate_simsapa_view() {
@@ -148,27 +125,3 @@ export default class SimsapaPlugin extends Plugin {
 	}
 }
 
-class SimsapaSettingTab extends PluginSettingTab {
-	plugin: SimsapaPlugin;
-
-	constructor(app: App, plugin: SimsapaPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
-
-	display(): void {
-		const {containerEl} = this;
-
-		containerEl.empty();
-
-		new Setting(containerEl)
-			.setName('Lookup using Simsapa Lookup Window')
-			.setDesc("When 'false' (default), the lookup action uses the Obsidian sidebar. When 'true', the lookup action sends the query directly to the Simsapa Lookup Window.")
-			.addToggle(text => text
-				.setValue(this.plugin.settings.lookup_using_simsapa)
-				.onChange(async (value) => {
-					this.plugin.settings.lookup_using_simsapa = value;
-					await this.plugin.save_settings();
-				}));
-	}
-}
