@@ -6,12 +6,17 @@ import _assets_dict_words from "./assets/dict_words_flat_completion_list.json";
 const dict_words_flat_completion_list = _assets_dict_words as string[];
 
 const SIMSAPA_BASE_URL = "http://localhost:4848";
+const OBSIDIAN_PLUGIN_STATIC_URL = "http://localhost:5353";
 const OBSIDIAN_PLUGIN_WS_URL = "ws://localhost:5354";
 const SEARCH_TIMER_SPEED = 400;
+const HEARTBEAT_TIME_MS = 10000; // 10s
 let SELECTED_IDX: number | null = null;
+let DONE_SERVER_INIT = false;
 
-let TYPING_TIMEOUT: ReturnType<typeof setInterval> = setTimeout(() => {}, 1);
-let SERVER_CHECK_TIMEOUT: ReturnType<typeof setInterval> = setTimeout(() => {}, 1);
+let SUTTAS_TYPING_TIMEOUT: ReturnType<typeof setInterval> = setTimeout(() => {}, 1);
+let DICT_TYPING_TIMEOUT: ReturnType<typeof setInterval> = setTimeout(() => {}, 1);
+
+
 
 function set_dark_mode(set_dark: boolean) {
   if (set_dark) {
@@ -66,9 +71,16 @@ const DATA = reactive({
   dict_count_msg: "",
 });
 
-const IS_FIREFOX = (typeof browser !== "undefined");
+let IS_FIREFOX = (typeof browser !== "undefined");
 const IS_CHROME = (typeof chrome !== "undefined" && chrome.hasOwnProperty('sidePanel'));
-const IS_OBSIDIAN = (typeof chrome !== "undefined" && !chrome.hasOwnProperty('sidePanel'));
+
+if (IS_FIREFOX) {
+  console.log("Simsapa Firefox extension: sidebar loaded.")
+}
+
+if (IS_CHROME) {
+  console.log("Simsapa Chrome extension: sidebar loaded.")
+}
 
 function select_tab(tab: Tab) {
   DATA.active_tab = tab;
@@ -156,14 +168,23 @@ function get_dict_dict_include(): boolean {
 }
 
 function set_query_and_search_dictionary(query_text: string): void {
-    select_tab(Tab.Dictionary);
-    const el = <HTMLInputElement | null>document.getElementById('dict-query-text')!;
-    if (!el) { return; }
-    el.value = query_text;
-    search_handler();
+  select_tab(Tab.Dictionary);
+  const el = <HTMLInputElement | null>document.getElementById('dict-query-text')!;
+  if (!el) { return; }
+  el.value = query_text;
+  const event = new Event('input');
+  el.dispatchEvent(event);
 }
 
 if (IS_FIREFOX) {
+  browser.runtime.connect({ name: 'SimsapaSidePanel' });
+  setInterval(() => {
+    browser.runtime.sendMessage("ping")
+      .catch((_e) => {
+        // console.error(e);
+      });
+  }, HEARTBEAT_TIME_MS);
+
   // Close the sidebar when the extension icon is clicked again.
   browser.action.onClicked.addListener(() => {
     browser.sidebarAction.close();
@@ -171,28 +192,61 @@ if (IS_FIREFOX) {
 
   // Receive the selected word from the double click event handler.
   browser.runtime.onMessage.addListener(function (message) {
+    if (message == "ping") { return; }
     set_query_and_search_dictionary(message.query_text);
   });
 }
 
 if (IS_CHROME) {
+  chrome.runtime.connect({ name: 'SimsapaSidePanel' });
+
+  setInterval(() => {
+    chrome.runtime.sendMessage("ping")
+      .catch((_e) => {
+        // console.error(e);
+      });
+  }, HEARTBEAT_TIME_MS);
+
   // Receive the selected word from the double click event handler.
   chrome.runtime.onMessage.addListener(function (message) {
+    if (message == "ping") { return; }
     set_query_and_search_dictionary(message.query_text);
   });
 }
 
-if (IS_OBSIDIAN) {
+function init_obsidian_ws() {
   const ws = new WebSocket(OBSIDIAN_PLUGIN_WS_URL);
+  let ws_heartbeat_timer = setInterval(() => { ws.send("ping"); }, HEARTBEAT_TIME_MS);
+
   // ws.onopen = function() {
   //   console.log("Websocket connection opened.");
   // };
 
   ws.onmessage = function(event) {
+    if (event.data == "ping") {
+      return;
+    }
     const data = JSON.parse(event.data);
     set_query_and_search_dictionary(data.selection);
   };
+
+  ws.onclose = function() {
+    clearTimeout(ws_heartbeat_timer);
+  };
 }
+
+// NOTE: A reliable way to tell if the sidebar is loaded in Firefox or in
+// Obsidian.
+fetch(OBSIDIAN_PLUGIN_STATIC_URL)
+  .then(resp => {
+    if (resp.ok) {
+      init_obsidian_ws();
+      console.log("Simsapa Obsidian extension: sidebar loaded.")
+    }
+  })
+  .catch((_e) => {
+    // console.error(e);
+  });
 
 // Returns the value for 'key' from the selected result,
 // in the active tab (Sutta or Word).
@@ -506,8 +560,9 @@ function server_online_init() {
         done: false,
       },
     },
-    onSubmit: (__e__, __selected_suggestion__) => {
-      search_handler();
+    onSubmit: (__e__: any, __selected_suggestion__: any) => {
+      // NOTE: Leave empty. Calling search_handler() here causes double query
+      // with typing timeout.
     },
   });
 
@@ -529,8 +584,9 @@ function server_online_init() {
       //   done: false,
       // },
     },
-    onSubmit: (__e__, __selected_suggestion__) => {
-      search_handler();
+    onSubmit: (__e__: any, __selected_suggestion__: any) => {
+      // NOTE: Leave empty. Calling search_handler() here causes double query
+      // with typing timeout.
     },
   });
 
@@ -547,18 +603,20 @@ function server_online_init() {
   });
 
   h.set_input('#suttas-query-text', function() {
-    clearTimeout(TYPING_TIMEOUT);
-    TYPING_TIMEOUT = setTimeout(search_handler, SEARCH_TIMER_SPEED);
+    clearTimeout(SUTTAS_TYPING_TIMEOUT);
+    SUTTAS_TYPING_TIMEOUT = setTimeout(search_handler, SEARCH_TIMER_SPEED);
   });
 
   h.set_input('#dict-query-text', function() {
-    clearTimeout(TYPING_TIMEOUT);
-    TYPING_TIMEOUT = setTimeout(search_handler, SEARCH_TIMER_SPEED);
+    clearTimeout(DICT_TYPING_TIMEOUT);
+    DICT_TYPING_TIMEOUT = setTimeout(search_handler, SEARCH_TIMER_SPEED);
   });
 
   window.addEventListener('dblclick', search_selection);
 
   sutta_and_dict_search_options_init();
+
+  DONE_SERVER_INIT = true;
 }
 
 function check_server() {
@@ -571,8 +629,9 @@ function check_server() {
         el = <HTMLElement>document.getElementById('server-offline');
         el.classList.add('hide');
 
-        clearTimeout(SERVER_CHECK_TIMEOUT);
-        server_online_init();
+        if (!DONE_SERVER_INIT) {
+          server_online_init();
+        }
 
       } else {
         throw new Error('Server is offline: ' + SIMSAPA_BASE_URL);
@@ -588,7 +647,7 @@ function check_server() {
 }
 
 window.addEventListener("DOMContentLoaded", function () {
-  SERVER_CHECK_TIMEOUT = setInterval(check_server, 1000);
+  setInterval(check_server, 1000);
 
   h.set_click('#copy-uid', () => { h.set_clipboard_text(cr('uid')) });
   h.set_click('#copy-word', () => { h.set_clipboard_text(cr('title')) });
