@@ -1,11 +1,11 @@
-addon.js:
-	tsc -p ./src-addon/tsconfig.json
+addon.js-gdocs:
+	tsc -p ./src-gdocs/tsconfig.json
 
 sidebar.css:
 	node ./node_modules/sass/sass.js --no-source-map src/sidebar.sass:dist-firefox/sidebar.css
 
-sidebar.html-addon:
-	./scripts/render_html.py src/sidebar.mako.html dist-addon/sidebar.html addon
+sidebar.html-gdocs:
+	./scripts/render_html.py src/sidebar.mako.html dist-gdocs/sidebar.html gdocs
 
 sidebar.html-firefox:
 	./scripts/render_html.py src/sidebar.mako.html dist-firefox/sidebar.html firefox
@@ -13,8 +13,8 @@ sidebar.html-firefox:
 sidebar.js:
 	npx webpack
 
-clean-addon:
-	rm -r dist-addon && mkdir dist-addon
+clean-gdocs:
+	rm -r dist-gdocs && mkdir dist-gdocs
 
 clean-firefox:
 	rm -r dist-firefox && mkdir dist-firefox
@@ -25,9 +25,9 @@ clean-chrome:
 clean-obsidian:
 	rm -r dist-obsidian && mkdir dist-obsidian
 
-dist-addon: addon.js sidebar.css sidebar.js sidebar.html-addon
-	cp src-addon/appsscript.json dist-addon/
-	cp src-addon/.claspignore dist-addon/
+dist-gdocs: addon.js-gdocs sidebar.css sidebar.js sidebar.html-gdocs
+	cp src-gdocs/appsscript.json dist-gdocs/
+	cp src-gdocs/.claspignore dist-gdocs/
 	clasp push
 
 dist-firefox: sidebar.css sidebar.js sidebar.html-firefox

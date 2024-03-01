@@ -1,6 +1,6 @@
 # Build targets
 dist/
-dist-addon/
+dist-gdocs/
 dist-firefox/
 dist-chrome/
 dist-obsidian/
