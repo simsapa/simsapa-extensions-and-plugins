@@ -11,7 +11,7 @@ const HEARTBEAT_TIME_MS = 10000; // 10s
 
 function sanitize_selection(text: string): string {
     // Remove Markdown syntax which may be part of a double-click selection.
-    return text.replace(/[_\*]/g, "");
+    return text.replace(/[\`\#\*_]/g, "");
 }
 
 function show_word(uid: string): void {
