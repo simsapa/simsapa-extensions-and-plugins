@@ -6,10 +6,10 @@ If you are using [vim-plug](https://github.com/junegunn/vim-plug), add this in y
 
 ``` vim-script
 " Using the github repository
-Plug 'simsapa/simsapa-browser-extension', { 'rtp': 'src-neovim' }
+Plug 'simsapa/simsapa-extensions-and-plugins', { 'rtp': 'src-neovim' }
 
 " Or, if you cloned the repository:
-Plug '~/path/to/simsapa-browser-extension', { 'rtp': 'src-neovim' }
+Plug '~/path/to/simsapa-extensions-and-plugins', { 'rtp': 'src-neovim' }
 ```
 
 Use `:UpdateRemotePlugins` to install.
