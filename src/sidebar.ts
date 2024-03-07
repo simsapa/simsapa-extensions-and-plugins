@@ -468,7 +468,7 @@ async function copy_gloss() {
   let item_values = [];
 
   if (uid.endsWith('/dpd')) {
-    const item_keys = ['uid', 'pali_1', 'pos', 'grammar', 'meaning_1', 'construction'];
+    const item_keys = ['uid', 'lemma_1', 'pos', 'grammar', 'meaning_1', 'construction'];
     item_values = item_keys.map(key => item[key]);
 
   } else {
