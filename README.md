@@ -2,18 +2,13 @@
 
 Companion tools for the [Simsapa Dhamma Reader](https://simsapa.github.io/) sutta reader and Pāli dictionary application.
 
-Browser Extensions:
-
-- Firefox
-- Google Chrome
-
-Editor Plugins:
-
-- Obsidian
-- Joplin
-- Emacs
-- Neovim
-- Google Docs
+- Firefox: [addons.mozilla.org](https://addons.mozilla.org)
+- Chrome: [chrome.google.com](https://chrome.google.com/webstore/category/extensions)
+- Obsidian: [obsidian.md/plugins](https://obsidian.md/plugins)
+- Joplin: [joplinapp.org/plugins](https://joplinapp.org/plugins/)
+- [Emacs package](#emacs)
+- [Neovim plugin](#neovim)
+- [Google Docs addon](#google-docs)
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
@@ -33,7 +28,7 @@ Editor Plugins:
 - Firefox: [addons.mozilla.org](https://addons.mozilla.org)
 - Chrome: [chrome.google.com](https://chrome.google.com/webstore/category/extensions)
 - Obsidian: [obsidian.md/plugins](https://obsidian.md/plugins)
-- Joplin: [joplinapp.org/plugins/](https://joplinapp.org/plugins/)
+- Joplin: [joplinapp.org/plugins](https://joplinapp.org/plugins/)
 
 ### Emacs
 
