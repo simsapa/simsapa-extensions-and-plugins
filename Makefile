@@ -32,6 +32,8 @@ dist-gdocs: addon.js-gdocs sidebar.css sidebar.js sidebar.html-gdocs
 
 dist-firefox: sidebar.css sidebar.js sidebar.html-firefox
 	cp -r src/icons/ dist-firefox/
+	cp README.md dist-firefox/
+	cp LICENSE.txt dist-firefox/
 	cp src/background-firefox.js dist-firefox/
 	cp src/content-script.js dist-firefox/
 	cp src/docs-user-style.css dist-firefox/
@@ -44,6 +46,8 @@ dist-chrome: sidebar.css sidebar.js sidebar.html-firefox
 	cp dist-firefox/sidebar.html dist-chrome/
 	cp dist-firefox/sidebar.js dist-chrome/
 	cp -r src/icons/ dist-chrome/
+	cp README.md dist-chrome/
+	cp LICENSE.txt dist-chrome/
 	cp src/background-chrome.js dist-chrome/
 	cp src/content-script.js dist-chrome/
 	cp src/docs-user-style.css dist-chrome/
