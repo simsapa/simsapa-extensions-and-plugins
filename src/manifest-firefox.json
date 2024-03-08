@@ -20,7 +20,7 @@
     },
 
     "background": {
-        "scripts": ["background.js"]
+        "scripts": ["background-firefox.js"]
     },
     "sidebar_action": {
         "default_icon": "icons/simsapa-48.png",

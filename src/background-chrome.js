@@ -15,29 +15,8 @@ function simsapa_app_lookup(word) {
     .catch(error => console.error('Error:', error));
 }
 
-// When loaded in the Firefox extension.
-if (typeof browser !== "undefined") {
-  console.log("Simsapa Firefox extention: background script loaded.");
-
-  // Open the sidebar when the extension icon is clicked.
-  browser.action.onClicked.addListener(() => {
-    browser.sidebarAction.open();
-  });
-
-  browser.runtime.onMessage.addListener(function (message) {
-    browser.sidebarAction
-           .isOpen({})
-           .then((is_open) => {
-             if (!is_open) {
-               simsapa_app_lookup(message.query_text);
-             }
-           });
-  });
-}
-
 let panel_is_open = false;
 
-// When loaded in the Chrome extension.
 if (typeof chrome !== "undefined" && chrome.hasOwnProperty('sidePanel')) {
   console.log("Simsapa Chrome extention: background script loaded.");
 
