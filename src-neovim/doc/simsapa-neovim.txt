@@ -1,3 +1,0 @@
-*simsapa-neovim.txt* Neovim plugin for Simsapa Dhamma Reader.
-
-Simsapa Dhamma Reader Neovim Plugin
