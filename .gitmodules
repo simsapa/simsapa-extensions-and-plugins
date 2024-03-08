@@ -1,0 +1,9 @@
+[submodule "src-obsidian"]
+	path = src-obsidian
+	url = https://github.com/simsapa/simsapa-obsidian.git
+[submodule "src-joplin"]
+	path = src-joplin
+	url = https://github.com/simsapa/simsapa-joplin.git
+[submodule "src-gdocs"]
+	path = src-gdocs
+	url = https://github.com/simsapa/simsapa-gdocs.git

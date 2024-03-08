@@ -5,21 +5,27 @@ Companion tools for the [Simsapa Dhamma Reader](https://simsapa.github.io/) sutt
 - Firefox: [addons.mozilla.org](https://addons.mozilla.org)
 - Chrome: [chrome.google.com](https://chrome.google.com/webstore/category/extensions)
 - Obsidian: [obsidian.md/plugins](https://obsidian.md/plugins)
+  - Repo: [simsapa-obsidian](https://github.com/simsapa/simsapa-obsidian)
 - Joplin: [joplinapp.org/plugins](https://joplinapp.org/plugins/)
-- [Emacs package](src-emacs/README.md)
-- [Neovim plugin](src-neovim/README.md)
-- [Google Docs addon](src-gdocs/README.md)
+  - Repo: [simsapa-joplin](https://github.com/simsapa/simsapa-joplin)
+- [Emacs package](https://github.com/simsapa/simsapa-emacs)
+- [Neovim plugin](https://github.com/simsapa/simsapa-neovim)
+- [Google Docs addon](https://github.com/simsapa/simsapa-gdocs)
 
 ## Development
 
 ### Clone and build
 
-Clone the repository.
+The extension sidebar is built in this repository (`src/sidebar.ts`), and bundled into the extensions as sub-module repos.
+
+Clone the repository **with the submodules:**
 
 ``` shell
-git clone https://github.com/simsapa/simsapa-extensions-and-plugins.git
+git clone --recurse-submodules https://github.com/simsapa/simsapa-extensions-and-plugins.git
 cd simsapa-extensions-and-plugins
 ```
+
+### Setup
 
 Setup the dependencies. [Poetry](https://python-poetry.org/docs/#installation) is required for Python packages.
 
