@@ -4,10 +4,12 @@ Companion tools for the [Simsapa Dhamma Reader](https://simsapa.github.io/) sutt
 
 - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/simsapa/)
 - Chrome:
-  - Install from the .zip file for the time being, [see the steps](#install-the-chrome-plugin)
-- [Obsidian](https://obsidian.md/plugins)
+  - Install from the .zip file for the time being, [see the steps](https://github.com/simsapa/simsapa-extensions-and-plugins?tab=readme-ov-file#install-the-chrome-plugin)
+- [Obsidian](https://obsidian.md/)
+  - Install from Obsidian: Settings > Community Plugins > Browse
   - Repo: [simsapa-obsidian](https://github.com/simsapa/simsapa-obsidian)
-- [Joplin](https://joplinapp.org/plugins/)
+- [Joplin](https://joplinapp.org/)
+  - Install from Joplin: Tools > Options > Plugins
   - Repo: [simsapa-joplin](https://github.com/simsapa/simsapa-joplin)
 - [Emacs package](https://github.com/simsapa/simsapa-emacs)
 - [Neovim plugin](https://github.com/simsapa/simsapa-neovim)

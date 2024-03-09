@@ -57,16 +57,17 @@ dist-chrome: sidebar.css sidebar.js sidebar.html-firefox
 	mv simsapa-chrome dist-chrome
 
 main.js-obsidian:
+	mkdir -p src-obsidian/static/
+	cp dist-firefox/sidebar.css src-obsidian/static/
+	cp dist-firefox/sidebar.html src-obsidian/static/
+	cp dist-firefox/sidebar.js src-obsidian/static/
 	cd src-obsidian && npm run build
 
 styles.css:
 	node ./node_modules/sass/sass.js --no-source-map src-obsidian/styles.sass:dist-obsidian/styles.css
 
 dist-obsidian: sidebar.css sidebar.js sidebar.html-firefox main.js-obsidian styles.css
-	mkdir -p dist-obsidian/static/
-	cp dist-firefox/sidebar.css dist-obsidian/static/
-	cp dist-firefox/sidebar.html dist-obsidian/static/
-	cp dist-firefox/sidebar.js dist-obsidian/static/
+	cp src-obsidian/README.md dist-obsidian/
 	cp src-obsidian/main.js dist-obsidian/
 	cp src-obsidian/manifest.json dist-obsidian/
 	mv dist-obsidian/ simsapa-obsidian-plugin/
