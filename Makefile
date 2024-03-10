@@ -61,7 +61,7 @@ main.js-obsidian:
 	cp dist-firefox/sidebar.css src-obsidian/static/
 	cp dist-firefox/sidebar.html src-obsidian/static/
 	cp dist-firefox/sidebar.js src-obsidian/static/
-	cd src-obsidian && npm run build
+	cd src-obsidian && npm install && npm run build
 
 styles.css:
 	node ./node_modules/sass/sass.js --no-source-map src-obsidian/styles.sass:dist-obsidian/styles.css
@@ -79,4 +79,4 @@ dist-joplin: sidebar.css sidebar.js sidebar.html-firefox styles.css
 	cp dist-firefox/sidebar.css src-joplin/src/static/
 	cp dist-firefox/sidebar.html src-joplin/src/static/
 	cp dist-firefox/sidebar.js src-joplin/src/static/
-	cd src-joplin && npm run dist
+	cd src-joplin && npm install && npm run dist
