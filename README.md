@@ -8,7 +8,7 @@ Companion tools for the [Simsapa Dhamma Reader](https://simsapa.github.io/) sutt
 - [Obsidian](https://obsidian.md/)
   - Install from Obsidian: Settings > Community Plugins > Browse
   - Repo: [simsapa-obsidian](https://github.com/simsapa/simsapa-obsidian)
-- [Joplin](https://joplinapp.org/)
+- [Joplin](https://joplinapp.org/plugins/plugin/io.github.simsapa/)
   - Install from Joplin: Tools > Options > Plugins
   - Repo: [simsapa-joplin](https://github.com/simsapa/simsapa-joplin)
 - [Emacs package](https://github.com/simsapa/simsapa-emacs)
@@ -21,7 +21,7 @@ The Chrome plugin is not yet published in the web store.
 
 - Download [simsapa-chrome.zip](https://github.com/simsapa/simsapa/releases/download/v0.5.0-alpha.1/simsapa-chrome.zip)
 - Extract to a folder
-- Open [Manage Extensions](chrome://extensions/)
+- Open [Menu > Extensions > Manage Extensions](chrome://extensions/) (`chrome://extensions/`)
 - Enable `Developer mode` in the top-right corner
 - Click `Load unpacked`, open the extracted extension folder
 - The extension is now installed
